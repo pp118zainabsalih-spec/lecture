@@ -1,0 +1,2078 @@
+<!-- Lecture (ليكچر) — v1.0 — study app for pharmacy students -->
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1F5138">
+<meta name="description" content="ليكچر: ارفع محاضرتك وذاكرها بطرق صيدلانية بضغطة واحدة">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="ليكچر">
+<title>ليكچر</title>
+<link rel="manifest" href="manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@700&text=%D9%84%D9%8A%D9%83%DA%86%D8%B1&display=swap">
+<style>
+:root{
+  --primary:#1F5138; --primary-700:#163B29; --primary-50:#E8F1EB; --on-primary:#F5E6C8;
+  --accent:#F5E6C8; --accent-ink:#5C4612;
+  --bg:#FBF7EE; --surface:#FFFFFF; --line:#E6DDC8; --line-strong:#CFC3A6;
+  --ink:#1D2A23; --muted:#56655C;
+  --red:#B42318; --red-50:#FDECEA; --amber:#8A5300; --amber-50:#FFF3D9; --green:#1E7B4D; --green-50:#E3F4EA;
+  --r-sm:10px; --r:14px; --r-lg:20px; --pill:999px;
+  --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:24px; --s6:32px;
+  --fs-xs:13px; --fs-sm:14px; --fs:16px; --fs-md:18px; --fs-lg:21px; --fs-xl:27px;
+  --shadow:0 1px 2px rgba(22,59,41,.06),0 6px 18px rgba(22,59,41,.07);
+  --font:'IBM Plex Sans Arabic',system-ui,-apple-system,'Segoe UI',Tahoma,sans-serif;
+  --brand:'El Messiri','IBM Plex Sans Arabic',serif;
+  --focus:0 0 0 3px #F2C14E;
+  --nav-h:64px;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:var(--fs);line-height:1.7;overflow-x:hidden}
+button,input,select,textarea{font:inherit;color:inherit}
+a{color:var(--primary)}
+:focus-visible{outline:none;box-shadow:var(--focus);border-radius:var(--r-sm)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.ltr{direction:ltr;unicode-bidi:isolate}
+.app{max-width:560px;margin:0 auto;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column}
+.topbar{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:var(--s2);padding:var(--s2) var(--s4);padding-top:max(var(--s2),env(safe-area-inset-top));min-height:56px}
+.topbar h1{font-size:var(--fs-md);margin:0;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.iconbtn{width:44px;height:44px;border-radius:var(--pill);border:0;background:transparent;display:inline-grid;place-items:center;cursor:pointer;color:var(--ink);flex:none}
+.iconbtn:hover{background:var(--primary-50)}
+.banner{font-size:var(--fs-sm);padding:var(--s2) var(--s4);text-align:center}
+.banner.demo{background:var(--amber-50);color:var(--amber)}
+.banner.off{background:#2B2B2B;color:#F2E7CE}
+.banner.ios{background:var(--primary-50);color:var(--primary-700);display:flex;gap:var(--s2);align-items:center;text-align:start}
+main{flex:1;padding:var(--s4)}
+footer.ver{text-align:center;color:var(--muted);font-size:var(--fs-xs);padding:var(--s2) var(--s4) calc(var(--nav-h) + var(--s5) + env(safe-area-inset-bottom))}
+body.nonav footer.ver{padding-bottom:calc(var(--s5) + env(safe-area-inset-bottom))}
+.nav{position:fixed;bottom:0;left:0;right:0;z-index:30;background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+.nav-in{max-width:560px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr)}
+.nav a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:var(--nav-h);text-decoration:none;color:var(--muted);font-size:12.5px;font-weight:500}
+.nav a[aria-current="page"]{color:var(--primary)}
+.nav a[aria-current="page"] .navpill{background:var(--primary-50)}
+.navpill{display:grid;place-items:center;width:52px;height:28px;border-radius:var(--pill)}
+h2{font-size:var(--fs-lg);margin:var(--s5) 0 var(--s3);line-height:1.4}
+h3{font-size:var(--fs-md);margin:0 0 var(--s2);line-height:1.45}
+p{margin:0 0 var(--s3)}
+.muted{color:var(--muted)}
+.small{font-size:var(--fs-sm)}
+.xs{font-size:var(--fs-xs)}
+.stack{display:flex;flex-direction:column;gap:var(--s3)}
+.row{display:flex;gap:var(--s2);align-items:center;flex-wrap:wrap}
+.spread{display:flex;gap:var(--s2);align-items:center;justify-content:space-between;flex-wrap:wrap}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:var(--s4);box-shadow:var(--shadow)}
+.card.flat{box-shadow:none}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:var(--s2);min-height:48px;padding:0 var(--s5);border-radius:var(--pill);border:1.5px solid transparent;font-weight:700;font-size:var(--fs);cursor:pointer;text-decoration:none;text-align:center;line-height:1.3}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+.btn-primary{background:var(--primary);color:var(--on-primary)}
+.btn-primary:hover:not([disabled]){background:var(--primary-700)}
+.btn-ghost{background:transparent;border-color:var(--line-strong);color:var(--primary)}
+.btn-soft{background:var(--primary-50);color:var(--primary-700)}
+.btn-amber{background:var(--amber-50);color:var(--amber);border-color:#F0D49A}
+.btn-block{width:100%}
+.btn-sm{min-height:44px;padding:0 var(--s4);font-size:var(--fs-sm)}
+.btn-big{min-height:64px;font-size:var(--fs-md);border-radius:var(--r-lg)}
+.chip{display:inline-flex;align-items:center;gap:6px;border-radius:var(--pill);padding:2px 10px;font-size:var(--fs-xs);font-weight:500;background:var(--primary-50);color:var(--primary-700);white-space:nowrap}
+.chip.amber{background:var(--amber-50);color:var(--amber)}
+.chip.red{background:var(--red-50);color:var(--red)}
+.chip.green{background:var(--green-50);color:var(--green)}
+.chip.gray{background:#EFEBE2;color:var(--muted)}
+.page{display:inline-flex;align-items:center;border-radius:var(--pill);border:1px solid var(--line-strong);padding:0 8px;font-size:12px;color:var(--muted);white-space:nowrap;font-weight:500;line-height:20px}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label,.field .lbl{font-weight:500;font-size:var(--fs-sm)}
+.input,select.input,textarea.input{width:100%;min-height:48px;border:1.5px solid var(--line-strong);border-radius:var(--r);background:var(--surface);padding:10px 14px;font-size:var(--fs)}
+textarea.input{min-height:140px;resize:vertical;line-height:1.7}
+.input:focus{border-color:var(--primary);outline:none;box-shadow:var(--focus)}
+.choice{display:flex;gap:var(--s2);flex-wrap:wrap}
+.choice label{flex:1;min-width:130px;display:flex;align-items:center;gap:var(--s2);min-height:52px;padding:0 var(--s4);border:1.5px solid var(--line-strong);border-radius:var(--r);cursor:pointer;background:var(--surface)}
+.choice input{accent-color:var(--primary);width:20px;height:20px}
+.choice label:has(input:checked){border-color:var(--primary);background:var(--primary-50)}
+.err{background:var(--red-50);color:var(--red);border-radius:var(--r);padding:var(--s3) var(--s4)}
+.okbox{background:var(--green-50);color:var(--green);border-radius:var(--r);padding:var(--s3) var(--s4)}
+.note{background:var(--amber-50);color:var(--amber);border-radius:var(--r);padding:var(--s3) var(--s4);font-size:var(--fs-sm)}
+.state{text-align:center;padding:var(--s6) var(--s4);display:flex;flex-direction:column;align-items:center;gap:var(--s3)}
+.state .ico{width:64px;height:64px;border-radius:50%;display:grid;place-items:center;background:var(--primary-50);color:var(--primary)}
+.state.error .ico{background:var(--red-50);color:var(--red)}
+.skel{background:linear-gradient(90deg,#EFE8D8 25%,#F7F2E6 50%,#EFE8D8 75%);background-size:200% 100%;animation:sk 1.2s infinite linear;border-radius:var(--r);height:84px}
+@keyframes sk{from{background-position:200% 0}to{background-position:-200% 0}}
+.spinner{width:28px;height:28px;border-radius:50%;border:3px solid var(--primary-50);border-top-color:var(--primary);animation:spin .9s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.skel,.spinner{animation:none}}
+.caps{display:flex;gap:5px;flex-wrap:wrap;align-items:center}
+.caps i{display:block;width:18px;height:9px;border-radius:var(--pill);border:1.5px solid var(--primary);background:transparent}
+.caps i.on{background:var(--primary)}
+.caps i.cur{width:26px;height:12px;background:var(--primary)}
+.caps i.bad{background:var(--red);border-color:var(--red)}
+.hero{text-align:center;padding:var(--s6) var(--s2) var(--s4)}
+.wordmark{font-family:var(--brand);font-weight:700;font-size:56px;line-height:1.1;color:var(--primary);margin:var(--s3) 0 0}
+.wordmark-en{letter-spacing:.34em;font-size:13px;color:var(--primary);font-weight:700;direction:ltr;margin-bottom:var(--s4)}
+.status-pill{display:inline-flex;align-items:center;gap:6px;border-radius:var(--pill);padding:6px 12px;font-size:var(--fs-sm);font-weight:500}
+.lect{display:flex;gap:var(--s3);align-items:flex-start;text-decoration:none;color:inherit}
+.lect .thumb{flex:none;width:48px;height:56px;border-radius:12px;background:var(--primary);color:var(--on-primary);display:grid;place-items:center}
+.lect .meta{flex:1;min-width:0}
+.lect h3{margin:0 0 2px;overflow-wrap:anywhere}
+.group-title{display:flex;align-items:center;gap:var(--s2);margin:var(--s5) 0 var(--s3);font-size:var(--fs-md);font-weight:700;color:var(--primary-700)}
+.group-title::before{content:"";width:22px;height:10px;border-radius:var(--pill);background:var(--primary)}
+.modes{display:grid;grid-template-columns:1fr 1fr;gap:var(--s3)}
+.mode{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:6px;min-height:118px;padding:var(--s3) var(--s3) var(--s3);border:1.5px solid var(--line);border-radius:var(--r-lg);background:var(--surface);cursor:pointer;text-align:start;box-shadow:var(--shadow)}
+.mode:hover:not(.dim){border-color:var(--primary)}
+.mode .mi{width:40px;height:40px;border-radius:12px;background:var(--primary-50);color:var(--primary);display:grid;place-items:center}
+.mode b{font-size:15px;line-height:1.35}
+.mode span.d{font-size:12.5px;color:var(--muted);line-height:1.45}
+.mode .badge{position:absolute;top:10px;left:10px}
+.mode.dim{opacity:.55;box-shadow:none;cursor:not-allowed;background:#F6F2E9}
+.mode.locked{background:#F6F2E9}
+.tabs{display:flex;gap:6px;background:#EFE8D8;border-radius:var(--pill);padding:4px}
+.tabs button{flex:1;min-height:40px;border:0;border-radius:var(--pill);background:transparent;font-weight:500;cursor:pointer;font-size:var(--fs-sm)}
+.tabs button[aria-pressed="true"]{background:var(--surface);color:var(--primary-700);box-shadow:var(--shadow)}
+.content{overflow-wrap:anywhere}
+.content[dir="ltr"]{text-align:left}
+.item{position:relative}
+.item + .item{margin-top:var(--s3)}
+.itemhead{display:flex;align-items:flex-start;gap:var(--s2);justify-content:space-between}
+.itemhead h3{flex:1;min-width:0}
+.flag{flex:none;min-width:44px;min-height:44px;border:0;background:transparent;color:var(--muted);border-radius:var(--pill);display:inline-grid;place-items:center;cursor:pointer;margin:-8px -8px 0}
+.flag:hover{color:var(--red);background:var(--red-50)}
+.fixbtn{min-height:36px;border-radius:var(--pill);border:1px solid #F0D49A;background:var(--amber-50);color:var(--amber);font-size:12.5px;font-weight:700;padding:0 10px;cursor:pointer}
+.analogy{display:flex;gap:var(--s2);background:var(--accent);color:var(--accent-ink);border-radius:var(--r);padding:var(--s3);margin-top:var(--s2);font-size:var(--fs-sm)}
+ul.clean{margin:0;padding-inline-start:20px}
+ul.clean li{margin:2px 0}
+.tree{list-style:none;margin:0;padding:0}
+.tree ul{list-style:none;margin:0;padding-inline-start:18px;border-inline-start:2px solid var(--line-strong);margin-inline-start:10px}
+.tree li{position:relative;margin:6px 0}
+.tree ul > li::before{content:"";position:absolute;inset-inline-start:-18px;top:18px;width:14px;border-top:2px solid var(--line-strong)}
+.node{display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap;background:var(--surface);border:1.5px solid var(--line-strong);border-radius:12px;padding:6px 10px;font-size:15px;line-height:1.45}
+.node.l0{background:var(--primary);color:var(--on-primary);border-color:var(--primary);font-weight:700}
+.node.l1{background:var(--primary-50);border-color:#BFD6C7;font-weight:700}
+.reels{display:flex;gap:var(--s3);overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:var(--s2);margin:0 calc(-1 * var(--s4));padding-inline:var(--s4);scrollbar-width:none}
+.reels::-webkit-scrollbar{display:none}
+.reel{flex:0 0 100%;scroll-snap-align:center;min-height:min(62vh,520px);border-radius:var(--r-lg);padding:var(--s5) var(--s4);display:flex;flex-direction:column;gap:var(--s3);background:var(--primary);color:#F7EEDC}
+.reel.quiz{background:var(--surface);color:var(--ink);border:1.5px solid var(--primary)}
+.reel h3{font-size:var(--fs-lg);color:inherit}
+.reel .body{font-size:var(--fs-md);line-height:1.75}
+.reel .page{color:inherit;border-color:currentColor;opacity:.8}
+.reel .flag{color:inherit}
+.opt{display:flex;align-items:flex-start;gap:var(--s2);width:100%;min-height:48px;padding:10px 14px;border:1.5px solid var(--line-strong);border-radius:var(--r);background:var(--surface);cursor:pointer;text-align:start;font-size:var(--fs);line-height:1.5}
+.opt .k{flex:none;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:#EFE8D8;font-size:13px;font-weight:700}
+.opt.right{border-color:var(--green);background:var(--green-50)}
+.opt.wrong{border-color:var(--red);background:var(--red-50)}
+.opt[disabled]{cursor:default;color:var(--ink)}
+.opts{display:flex;flex-direction:column;gap:var(--s2)}
+.analysis{margin-top:var(--s3);border-top:1px dashed var(--line-strong);padding-top:var(--s3);font-size:var(--fs-sm)}
+.analysis li{margin-bottom:6px}
+.golden{margin-top:var(--s3);display:flex;gap:var(--s2);align-items:flex-start;background:var(--accent);color:var(--accent-ink);border-radius:var(--r);padding:var(--s3);font-weight:500}
+.golden .lbl{font-weight:700;flex:none}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r);margin-top:var(--s2)}
+table.mx{border-collapse:collapse;min-width:100%;font-size:var(--fs-sm)}
+table.mx th,table.mx td{padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top;text-align:start;min-width:120px}
+table.mx th{background:var(--primary);color:var(--on-primary);font-weight:700}
+table.mx td:first-child{font-weight:700;background:#F8F4EA}
+.mnemo{font-size:26px;font-weight:700;color:var(--primary);letter-spacing:.02em;direction:ltr;text-align:left;line-height:1.35;margin:var(--s2) 0}
+.bd{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:var(--fs-sm)}
+.bd .k{font-weight:700;color:var(--primary)}
+.lik{display:flex;align-items:center;gap:var(--s2);font-weight:700;margin:var(--s4) 0 var(--s2)}
+.lik i{width:12px;height:12px;border-radius:50%}
+.sent{display:block;width:100%;text-align:start;border:1.5px solid var(--line);background:var(--surface);border-radius:var(--r);padding:10px 12px;margin-bottom:var(--s2);cursor:pointer;line-height:1.6;font-size:var(--fs)}
+.sent[aria-pressed="true"]{border-color:var(--amber);background:var(--amber-50)}
+.sent.hit{border-color:var(--green);background:var(--green-50)}
+.sent.miss{border-color:var(--amber);background:var(--amber-50)}
+.sent.false{border-color:var(--red);background:var(--red-50)}
+.fixline{display:block;margin-top:6px;font-size:var(--fs-sm);color:var(--green);font-weight:500}
+.score{display:flex;align-items:center;gap:var(--s4)}
+.ring{width:84px;height:84px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:var(--fs-lg);background:conic-gradient(var(--primary) calc(var(--p)*1%),#E8E0CC 0);position:relative}
+.ring::after{content:"";position:absolute;inset:8px;border-radius:50%;background:var(--surface)}
+.ring span{position:relative;z-index:1}
+.drug-head{display:flex;gap:var(--s3);align-items:center}
+.avatar{flex:none;width:56px;height:56px;border-radius:50%;background:var(--primary);color:var(--on-primary);display:grid;place-items:center;font-weight:700;font-size:var(--fs-md)}
+.intro{font-size:var(--fs-md);line-height:1.7;margin:var(--s3) 0;padding-inline-start:var(--s3);border-inline-start:4px solid var(--accent)}
+.kv{margin-top:var(--s2)}
+.kv .k{font-weight:700;font-size:var(--fs-sm);color:var(--primary-700)}
+.sets{display:flex;gap:var(--s2);overflow-x:auto;padding-bottom:4px}
+.sets button{flex:none;min-height:44px;border-radius:var(--pill);border:1.5px solid var(--line-strong);background:var(--surface);padding:0 14px;cursor:pointer;font-size:var(--fs-sm);font-weight:500}
+.sets button[aria-pressed="true"]{border-color:var(--primary);background:var(--primary);color:var(--on-primary)}
+.timeline{list-style:none;margin:0;padding:0;border-inline-start:2px solid var(--line-strong);margin-inline-start:8px}
+.timeline li{position:relative;padding:0 var(--s4) var(--s3)}
+.timeline li::before{content:"";position:absolute;inset-inline-start:-7px;top:9px;width:12px;height:12px;border-radius:50%;background:var(--primary);border:2px solid var(--bg)}
+.timeline a{text-decoration:none;color:inherit;display:block;min-height:44px}
+.day{border:1px solid var(--line);border-radius:var(--r);background:var(--surface);padding:var(--s3);margin-bottom:var(--s2)}
+.day .sess{display:flex;gap:var(--s2);align-items:flex-start;padding:6px 0;border-top:1px dashed var(--line);font-size:var(--fs-sm)}
+.day .sess:first-of-type{border-top:0}
+.bar{height:10px;border-radius:var(--pill);background:#EFE8D8;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--red);border-radius:var(--pill)}
+.steps-list{counter-reset:st;list-style:none;margin:0;padding:0}
+.steps-list > li{counter-increment:st;position:relative;padding-inline-start:44px;margin-bottom:var(--s5)}
+.steps-list > li::before{content:counter(st);position:absolute;inset-inline-start:0;top:0;width:32px;height:32px;border-radius:50%;background:var(--primary);color:var(--on-primary);display:grid;place-items:center;font-weight:700}
+.illus{width:100%;height:auto;border-radius:var(--r);border:1px solid var(--line);background:#fff}
+.toast{position:fixed;left:50%;bottom:calc(var(--nav-h) + 16px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:60;max-width:min(92vw,520px);background:#1D2A23;color:#fff;border-radius:var(--r);padding:12px 16px;box-shadow:0 8px 24px rgba(0,0,0,.2);font-size:var(--fs-sm)}
+.toast.bad{background:var(--red)}
+dialog{border:0;border-radius:var(--r-lg);padding:0;width:min(94vw,500px);max-height:90vh;color:var(--ink);background:var(--surface)}
+dialog::backdrop{background:rgba(20,30,25,.45)}
+.dlg{padding:var(--s5) var(--s4);display:flex;flex-direction:column;gap:var(--s3)}
+.codebox{font-family:ui-monospace,Menlo,Consolas,monospace;direction:ltr;letter-spacing:.08em;font-weight:700}
+.calc-in{display:flex;gap:var(--s2);align-items:center}
+.calc-in .input{direction:ltr;text-align:left;flex:1;min-width:0}
+.calc-in .btn{flex:none;white-space:nowrap}
+.dropzone{display:flex;flex-direction:column;align-items:center;gap:var(--s2);border:2px dashed var(--line-strong);border-radius:var(--r-lg);padding:var(--s6) var(--s4);text-align:center;background:var(--surface);cursor:pointer}
+.dropzone:focus-within{box-shadow:var(--focus)}
+.prog{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:var(--s3)}
+.prog li{display:flex;align-items:center;gap:var(--s3);color:var(--muted)}
+.prog li.now{color:var(--ink);font-weight:700}
+.prog li.ok{color:var(--green)}
+.prog .dot{width:28px;height:28px;flex:none;display:grid;place-items:center}
+.prog .dot i{display:block;width:20px;height:10px;border-radius:var(--pill);border:1.5px solid currentColor}
+.prog li.ok .dot i{background:currentColor}
+details.ex{background:#F8F4EA;border-radius:var(--r);padding:var(--s2) var(--s3);font-size:var(--fs-sm)}
+details.ex summary{cursor:pointer;min-height:36px;display:flex;align-items:center;font-weight:500}
+pre.wrap{white-space:pre-wrap;font-family:inherit;margin:0}
+.today{border-color:var(--primary);box-shadow:var(--shadow)}
+.past{opacity:.6}
+#print-root{display:none}
+@media print{
+  body{background:#fff}
+  body.printing .app,body.printing .nav,body.printing .toast,body.printing dialog{display:none!important}
+  body.printing #print-root{display:block;padding:0 8mm;font-size:11.5pt}
+  #print-root .card{box-shadow:none;break-inside:avoid;border-color:#ccc}
+  #print-root .flag,#print-root .fixbtn{display:none}
+  #print-root .reels{display:block;overflow:visible;margin:0;padding:0}
+  #print-root .reel{min-height:0;margin-bottom:8px;break-inside:avoid;background:#fff;color:#000;border:1px solid #999}
+  #print-root .pbreak{break-before:page}
+}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <div id="banners"></div>
+  <header class="topbar" id="topbar"></header>
+  <main id="view" tabindex="-1"></main>
+  <footer class="ver" id="ver">ليكچر v1.0</footer>
+</div>
+<nav class="nav" id="nav" aria-label="التنقل الرئيسي" hidden></nav>
+<div id="print-root" aria-hidden="true"></div>
+<dialog id="dlg"></dialog>
+<div id="toasts" aria-live="polite"></div>
+<script>
+'use strict';
+/* ============================== CONFIG ============================== */
+const APP = { name: 'ليكچر', nameEn: 'LECTURE', version: 'v1.0' };
+// Paste the web config from Firebase console > Project settings > Your apps (stage 4). Empty = demo mode on this device.
+const FIREBASE_CONFIG = {};
+// Owner UID(s). Must match the list inside firestore.rules.
+const ADMIN_UIDS = [];
+const FB_VER = '12.19.0';
+const WHATSAPP_INTL = '9647725172059';
+const AI = {
+  base: 'https://generativelanguage.googleapis.com/v1beta',
+  models: ['gemini-3.8-flash', 'gemini-3.6-flash', 'gemini-3.5-flash-lite'],
+  keyPage: 'https://aistudio.google.com/apikey'
+};
+const LIMITS = { maxMB: 20, maxPages: 150, textCap: 120000, subDays: 30, scannedChars: 80 };
+const PDFJS = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/';
+const COUNTRIES = ['العراق','سوريا','الأردن','لبنان','فلسطين','مصر','السعودية','الكويت','الإمارات','قطر','البحرين','عُمان','اليمن','ليبيا','تونس','الجزائر','المغرب','السودان','أخرى'];
+
+/* ============================== UTILITIES ============================== */
+const $ = (s, r = document) => r.querySelector(s);
+const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+const clone = (o) => JSON.parse(JSON.stringify(o));
+class AppError extends Error { constructor(msg, action) { super(msg); this.action = action || null; } }
+
+function h(tag, attrs, ...kids) {
+  const el = document.createElement(tag);
+  if (attrs) for (const [k, v] of Object.entries(attrs)) {
+    if (v == null || v === false) continue;
+    if (k === 'class') el.className = v;
+    else if (k.startsWith('on') && typeof v === 'function') el.addEventListener(k.slice(2).toLowerCase(), v);
+    else if (k === 'value' && 'value' in el) el.value = v;
+    else if (v === true) el.setAttribute(k, '');
+    else el.setAttribute(k, String(v));
+  }
+  for (const kid of kids.flat(Infinity)) {
+    if (kid == null || kid === false || kid === '') continue;
+    el.append(kid instanceof Node ? kid : document.createTextNode(String(kid)));
+  }
+  return el;
+}
+// Text that may mix English and Arabic: let the browser pick direction per block.
+const t = (tag, text, cls) => h(tag, { dir: 'auto', class: cls || null }, text == null ? '' : String(text));
+const bdi = (text) => h('bdi', null, String(text));
+
+const ICONS = {
+  back: '<path d="M9 6l6 6-6 6"/>',
+  home: '<path d="M4 6.5h6v12H4zM14 6.5h6v12h-6z"/><path d="M6.5 9.5h1M16.5 9.5h1"/>',
+  plan: '<rect x="4" y="5" width="16" height="15" rx="3"/><path d="M8 3v4M16 3v4M4 10h16M8 14h3M13 14h3M8 17h3"/>',
+  target: '<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1"/>',
+  user: '<circle cx="12" cy="8.5" r="3.5"/><path d="M5 20c.8-3.6 3.6-5.5 7-5.5s6.2 1.9 7 5.5"/>',
+  upload: '<path d="M12 16V5M7.5 9.5L12 5l4.5 4.5"/><path d="M5 15v3a2 2 0 002 2h10a2 2 0 002-2v-3"/>',
+  file: '<path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5M10 13h6M10 17h6"/>',
+  flag: '<path d="M6 21V4M6 4h11l-2.5 4L17 12H6"/>',
+  check: '<path d="M5 12.5l4.5 4.5L19 7.5"/>',
+  lock: '<rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8 10.5V8a4 4 0 018 0v2.5"/>',
+  print: '<path d="M7 9V4h10v5"/><rect x="4" y="9" width="16" height="8" rx="2"/><path d="M7 14h10v6H7z"/>',
+  refresh: '<path d="M19 12a7 7 0 11-2.05-4.95"/><path d="M19 4v4.5h-4.5"/>',
+  plus: '<path d="M12 5v14M5 12h14"/>',
+  chat: '<path d="M5 18l-1 3 3.5-1.5A8.5 8.5 0 104 12c0 2.2.8 4.2 2 5.7"/>',
+  globe: '<circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.5 2.5 3.5 5.5 3.5 8.5s-1 6-3.5 8.5c-2.5-2.5-3.5-5.5-3.5-8.5s1-6 3.5-8.5z"/>',
+  clip: '<rect x="7" y="4" width="10" height="4" rx="1.5"/><path d="M7 6H5v15h14V6h-2"/>',
+  shield: '<path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4"/>',
+  copy: '<rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 00-1-1H5a1 1 0 00-1 1v10a1 1 0 001 1h3"/>',
+  out: '<path d="M14 5h5v14h-5M10 12h9M7 8l-4 4 4 4"/>',
+  info: '<circle cx="12" cy="12" r="8.5"/><path d="M12 11v5M12 8v.5"/>',
+  wifi: '<path d="M4 9a12 12 0 0116 0M7 12.5a7.5 7.5 0 0110 0M10 16a3 3 0 014 0"/><path d="M12 19.5v.01"/>',
+  bulb: '<path d="M9 18h6M10 21h4M8 14.5a6 6 0 118 0c-.9.8-1.3 1.6-1.4 2.5H9.4c-.1-.9-.5-1.7-1.4-2.5z"/>',
+  tree: '<rect x="9" y="3" width="6" height="4" rx="1.5"/><rect x="3" y="16" width="6" height="4" rx="1.5"/><rect x="15" y="16" width="6" height="4" rx="1.5"/><path d="M12 7v4M6 16v-3h12v3"/>',
+  cards: '<rect x="6" y="5" width="12" height="16" rx="2.5"/><path d="M9 2.5h9.5A2.5 2.5 0 0121 5v12"/><path d="M9 11h6M9 14h4"/>',
+  pill: '<rect x="2.5" y="8.5" width="19" height="7" rx="3.5" transform="rotate(-35 12 12)"/><path d="M9.2 8l5.6 8"/>',
+  store: '<path d="M4 10h16M5 10l1-5h12l1 5M6 10v10h12V10"/><path d="M10 20v-5h4v5"/>',
+  table: '<rect x="3.5" y="5" width="17" height="14" rx="2"/><path d="M3.5 10h17M9.5 5v14"/>',
+  spark: '<path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M18.5 16l.7 2 2 .7-2 .7-.7 2-.7-2-2-.7 2-.7z"/>',
+  sheet: '<rect x="5" y="3.5" width="14" height="17" rx="2"/><path d="M8.5 8.5l1.2 1.2 2.3-2.3M14 9h2M8.5 13.5l1.2 1.2 2.3-2.3M14 14h2"/>',
+  stairs: '<path d="M4 20h4v-4h4v-4h4V8h4"/><path d="M4 20V16"/>',
+  search: '<circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l5 5"/>',
+  teach: '<path d="M4 6.5A2.5 2.5 0 016.5 4h11A2.5 2.5 0 0120 6.5v7a2.5 2.5 0 01-2.5 2.5H11l-4.5 4v-4h0A2.5 2.5 0 014 13.5z"/><path d="M8 9h8M8 12h5"/>',
+  calc: '<rect x="5" y="3" width="14" height="18" rx="2.5"/><path d="M8 7h8M8.5 12h1M12 12h1M15 12h.5M8.5 15.5h1M12 15.5h1M15 15.5h.5M8.5 18.5h1M12 18.5h4"/>',
+  whatsapp: '<path d="M4.5 20l1.2-3.6A8 8 0 1112 20a8 8 0 01-3.9-1z"/><path d="M9 8.5c0 3.3 2.6 6.2 6 6.5l1-1.5-2-1-1 .8c-1-.4-2-1.4-2.4-2.4l.8-1-1-2z"/>'
+};
+function icon(name, size = 22, label) {
+  const s = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  s.setAttribute('viewBox', '0 0 24 24'); s.setAttribute('width', size); s.setAttribute('height', size);
+  s.setAttribute('fill', 'none'); s.setAttribute('stroke', 'currentColor'); s.setAttribute('stroke-width', '1.8');
+  s.setAttribute('stroke-linecap', 'round'); s.setAttribute('stroke-linejoin', 'round');
+  if (label) { s.setAttribute('role', 'img'); s.setAttribute('aria-label', label); } else s.setAttribute('aria-hidden', 'true');
+  s.innerHTML = ICONS[name] || ''; // constant markup only
+  return s;
+}
+// Approved logo: letter چ with a capsule head (study lines in the open half) and three tablets.
+function logoMarkup(bg = true, lines = true, score = true) {
+  return (bg ? '<rect width="512" height="512" rx="112" fill="#1F5138"/>' : '') +
+    '<g transform="translate(256 260) scale(0.86) translate(-247 -258)">' +
+    '<path d="M369 149 L 190 194 C 118 236 112 340 168 392 C 220 440 310 440 372 396" fill="none" stroke="#F5E6C8" stroke-width="64" stroke-linecap="round" stroke-linejoin="round"/>' +
+    '<g transform="rotate(12.9 245 121)"><path d="M118 89 H245 V153 H118 A32 32 0 0 1 118 89 Z" fill="#F5E6C8"/>' +
+    '<path d="M245 89 H372 A32 32 0 0 1 372 153 H245 Z" fill="#1F5138" stroke="#F5E6C8" stroke-width="12"/>' +
+    (lines ? '<path d="M266 110 H372 M266 132 H340" stroke="#F5E6C8" stroke-width="7" stroke-linecap="round"/>' : '') + '</g>' +
+    '<circle cx="240" cy="312" r="23" fill="#F5E6C8"/><circle cx="294" cy="312" r="23" fill="#F5E6C8"/><circle cx="267" cy="358" r="23" fill="#F5E6C8"/>' +
+    (score ? '<path d="M227 325 L253 299 M281 325 L307 299 M254 371 L280 345" stroke="#1F5138" stroke-width="6" stroke-linecap="round"/>' : '') + '</g>';
+}
+function logo(size, label) {
+  const s = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  s.setAttribute('viewBox', '0 0 512 512'); s.setAttribute('width', size); s.setAttribute('height', size);
+  if (label) { s.setAttribute('role', 'img'); s.setAttribute('aria-label', label); } else s.setAttribute('aria-hidden', 'true');
+  s.innerHTML = logoMarkup(true, size >= 40, size >= 40);
+  return s;
+}
+(function setFavicon() {
+  const svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">' + logoMarkup(true, true, false) + '</svg>';
+  const l = document.createElement('link'); l.rel = 'icon'; l.type = 'image/svg+xml';
+  l.href = 'data:image/svg+xml,' + encodeURIComponent(svg); document.head.appendChild(l);
+})();
+
+const fmtDate = (ms) => { try { return new Intl.DateTimeFormat('ar-IQ-u-nu-latn', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(ms)); } catch (e) { return new Date(ms).toISOString().slice(0, 10); } };
+const fmtDay = (ms) => { try { return new Intl.DateTimeFormat('ar-IQ-u-nu-latn', { weekday: 'long', day: 'numeric', month: 'long' }).format(new Date(ms)); } catch (e) { return new Date(ms).toISOString().slice(0, 10); } };
+function plural(n, one, two, few, many) { n = Number(n); if (n === 1) return one; if (n === 2) return two; const r = n % 100; return n + ' ' + (r >= 3 && r <= 10 ? few : many); }
+const P_PAGES = (n) => plural(n, 'صفحة واحدة', 'صفحتان', 'صفحات', 'صفحة');
+const P_DAYS = (n) => plural(n, 'يوم واحد', 'يومان', 'أيام', 'يومًا');
+const P_MIN = (n) => plural(n, 'دقيقة واحدة', 'دقيقتان', 'دقائق', 'دقيقة');
+const fmtIQD = (n) => Number(n).toLocaleString('en-US') + ' د.ع';
+const toWestern = (s) => String(s).replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d)).replace(/٫/g, '.').replace(/،/g, ',');
+const pagesLabel = (p) => { const arr = (Array.isArray(p) ? p : [p]).map(Number).filter(n => Number.isFinite(n) && n > 0); if (!arr.length) return ''; const mn = Math.min(...arr), mx = Math.max(...arr); return mn === mx ? 'ص ' + mn : 'ص ' + mn + '–' + mx; };
+const pageBadge = (p) => { const l = pagesLabel(p); return l ? h('span', { class: 'page', dir: 'rtl' }, l) : null; };
+function rid(n = 20, alpha = 'abcdefghijklmnopqrstuvwxyz0123456789') {
+  const a = new Uint32Array(n); crypto.getRandomValues(a); let s = ''; for (const x of a) s += alpha[x % alpha.length]; return s;
+}
+const CODE_ALPHA = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
+const fmtCode = (c) => c.slice(0, 5) + '-' + c.slice(5);
+function withTimeout(p, ms, msg) {
+  let tm; const to = new Promise((_, rej) => { tm = setTimeout(() => { const e = new AppError(msg || 'انتهت مهلة الاتصال. تحقق من الإنترنت وأعد المحاولة.'); e.code = 'timeout'; rej(e); }, ms); });
+  return Promise.race([p, to]).finally(() => clearTimeout(tm));
+}
+function toast(msg, bad) {
+  const box = $('#toasts'); box.textContent = '';
+  const el = h('div', { class: 'toast' + (bad ? ' bad' : ''), role: 'status' }, msg); box.append(el);
+  setTimeout(() => { if (el.parentNode) el.remove(); }, 3800);
+}
+const LS = {
+  get(k, d = null) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch (e) { return false; } },
+  del(k) { try { localStorage.removeItem(k); } catch (e) { /* storage unavailable */ } }
+};
+const online = () => navigator.onLine !== false;
+function needOnline() { if (!online()) throw new AppError('أنت غير متصل بالإنترنت. اتصل ثم أعد المحاولة.'); }
+
+/* ============================== STORAGE ADAPTER ============================== */
+function cmp(a, op, b) {
+  switch (op) { case '==': return a === b; case '!=': return a !== b; case '>': return a > b; case '>=': return a >= b; case '<': return a < b; case '<=': return a <= b; default: return false; }
+}
+const LocalStore = {
+  kind: 'local', _mem: null,
+  _load() { if (this._mem) return this._mem; this._mem = LS.get('lecture.db', {}) || {}; return this._mem; },
+  _save() { if (!LS.set('lecture.db', this._mem)) throw new AppError('مساحة التخزين على هذا الجهاز ممتلئة أو غير متاحة.'); },
+  async get(col, id) { const d = this._load(); const v = d[col] && d[col][id]; return v ? Object.assign({ id }, clone(v)) : null; },
+  async set(col, id, data, opts = {}) { const d = this._load(); d[col] = d[col] || {}; d[col][id] = opts.merge ? Object.assign({}, d[col][id] || {}, clone(data)) : clone(data); this._save(); return { queued: false }; },
+  async list(col, filters = []) { const d = this._load(); return Object.entries(d[col] || {}).map(([id, v]) => Object.assign({ id }, clone(v))).filter(r => filters.every(([f, op, val]) => cmp(r[f], op, val))); },
+  async remove(col, id) { const d = this._load(); if (d[col]) delete d[col][id]; this._save(); return { queued: false }; },
+  async batch(ops) { for (const o of ops) { if (o.op === 'set') await this.set(o.col, o.id, o.data, { merge: o.merge }); else await this.remove(o.col, o.id); } return { queued: false }; }
+};
+function mapFsError(e) {
+  if (e instanceof AppError) return e;
+  const c = (e && e.code) || '';
+  if (c.includes('permission-denied')) return new AppError('لا تملك صلاحية لهذا الإجراء.');
+  if (c.includes('unavailable')) return new AppError('تعذّر الوصول إلى الخادم. تحقق من الاتصال وأعد المحاولة.');
+  if (c.includes('resource-exhausted')) return new AppError('الخادم مشغول الآن. أعد المحاولة بعد قليل.');
+  return new AppError('حدث خطأ في حفظ البيانات أو قراءتها. أعد المحاولة.');
+}
+function makeFirestoreStore(fs, db) {
+  const { doc, getDoc, setDoc, deleteDoc, collection, query, where, getDocs, writeBatch } = fs;
+  async function write(p) {
+    if (!online()) { p.catch(() => { }); return { queued: true }; }
+    try { await withTimeout(p, 15000); return { queued: false }; }
+    catch (e) { if (e && e.code === 'timeout') { p.catch(() => { }); return { queued: true }; } throw mapFsError(e); }
+  }
+  return {
+    kind: 'firestore',
+    async get(col, id) { try { const s = await withTimeout(getDoc(doc(db, col, id)), 15000); return s.exists() ? Object.assign({ id: s.id }, s.data()) : null; } catch (e) { throw mapFsError(e); } },
+    set(col, id, data, opts = {}) { return write(setDoc(doc(db, col, id), data, opts.merge ? { merge: true } : {})); },
+    async list(col, filters = []) { try { const q = query(collection(db, col), ...filters.map(([f, op, v]) => where(f, op, v))); const s = await withTimeout(getDocs(q), 20000); return s.docs.map(d => Object.assign({ id: d.id }, d.data())); } catch (e) { throw mapFsError(e); } },
+    remove(col, id) { return write(deleteDoc(doc(db, col, id))); },
+    batch(ops) { const b = writeBatch(db); for (const o of ops) { const r = doc(db, o.col, o.id); if (o.op === 'set') b.set(r, o.data, o.merge ? { merge: true } : {}); else b.delete(r); } return write(b.commit()); }
+  };
+}
+let Store = LocalStore;
+function saved(res) { if (res && res.queued) toast('حُفظ على جهازك وسيُرفع تلقائيًا عند عودة الاتصال.'); return res; }
+
+/* Original PDF files stay on the student's device (IndexedDB). */
+const FileVault = {
+  _db: null, _mem: {},
+  open() {
+    if (this._db) return Promise.resolve(this._db);
+    return new Promise((res, rej) => {
+      try {
+        const r = indexedDB.open('lecture-files', 1);
+        r.onupgradeneeded = () => r.result.createObjectStore('files');
+        r.onsuccess = () => { this._db = r.result; res(this._db); };
+        r.onerror = () => rej(r.error);
+      } catch (e) { rej(e); }
+    });
+  },
+  async put(id, blob) {
+    try { const db = await this.open(); await new Promise((res, rej) => { const tx = db.transaction('files', 'readwrite'); tx.objectStore('files').put(blob, id); tx.oncomplete = res; tx.onerror = () => rej(tx.error); }); return true; }
+    catch (e) { this._mem[id] = blob; return false; }
+  },
+  async get(id) {
+    try { const db = await this.open(); return await new Promise((res, rej) => { const tx = db.transaction('files', 'readonly'); const q = tx.objectStore('files').get(id); q.onsuccess = () => res(q.result || this._mem[id] || null); q.onerror = () => rej(q.error); }); }
+    catch (e) { return this._mem[id] || null; }
+  }
+};
+async function sha256Hex(buf) { const d = await crypto.subtle.digest('SHA-256', buf); return [...new Uint8Array(d)].map(b => b.toString(16).padStart(2, '0')).join(''); }
+function blobToBase64(blob) { return new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(String(r.result).split(',')[1] || ''); r.onerror = () => rej(r.error); r.readAsDataURL(blob); }); }
+
+/* ============================== STUDY METHODS ============================== */
+const GROUPS = [{ id: 'understand', ar: 'افهم' }, { id: 'memorize', ar: 'احفظ' }, { id: 'test', ar: 'اختبر نفسك' }];
+const MODES = {
+  simplify: { ar: 'التبسيط', group: 'understand', kind: 'static', icon: 'bulb', desc: 'شرح مبسّط لمن هو خارج التخصص' },
+  diagram: { ar: 'التبسيط كمخطط', group: 'understand', kind: 'static', icon: 'tree', desc: 'المحاضرة كلها في مخطط واحد' },
+  reels: { ar: 'ريلز المحاضرة', group: 'understand', kind: 'static', icon: 'cards', desc: 'بطاقات قصيرة وسؤال بعد كل ثلاث' },
+  drugs: { ar: 'الدواء يقدّم نفسه', group: 'understand', kind: 'static', icon: 'pill', desc: 'كل دواء يعرّف بنفسه' },
+  counter: { ar: 'من المحاضرة إلى الكاونتر', group: 'understand', kind: 'exercise', icon: 'store', desc: 'مواقف حقيقية في الصيدلية' },
+  matrix: { ar: 'مصفوفة المتشابهات', group: 'memorize', kind: 'static', icon: 'table', desc: 'جداول المتشابهات وسؤال أين الفخ' },
+  mnemonics: { ar: 'محفّظات', group: 'memorize', kind: 'static', icon: 'spark', desc: 'جمل قصيرة تحفظ بها القوائم' },
+  review: { ar: 'مخطط المراجعة السريعة', group: 'memorize', kind: 'static', icon: 'sheet', desc: 'صفحة واحدة قبل الامتحان لا يومه' },
+  ladder: { ar: 'سلّم الأسئلة العام', group: 'test', kind: 'exercise', icon: 'stairs', desc: 'أسئلة متدرجة من السهل إلى الصعب' },
+  spot: { ar: 'اصطد الخطأ', group: 'test', kind: 'exercise', icon: 'search', desc: 'خمسة أخطاء مزروعة في النص' },
+  teach: { ar: 'راجع معي', group: 'test', kind: 'session', icon: 'teach', desc: 'اشرح بكلماتك ونقارن ونصحّح' },
+  calc: { ar: 'مسائل الحسابات المتغيّرة', group: 'test', kind: 'calc', icon: 'calc', desc: 'أرقام جديدة في كل مرة' }
+};
+function modeBlocked(mode, d) {
+  if (!d) return null;
+  if (mode === 'drugs' && !d.drugs.length) return 'لا توجد أدوية في هذه المحاضرة';
+  if (mode === 'counter' && !d.counterRelevant && !d.drugs.length) return 'المحتوى لا يصلح لمواقف الصيدلية';
+  if (mode === 'matrix' && !d.comparisons.length && d.drugs.length < 2) return 'لا توجد عناصر متشابهة للمقارنة';
+  if (mode === 'calc' && !d.calculations.length) return 'لا توجد حسابات في هذه المحاضرة';
+  return null;
+}
+
+/* ============================== AI SERVICE (student's own account) ============================== */
+const arr = (x) => Array.isArray(x) ? x : [];
+const str = (x) => typeof x === 'string' ? x.trim() : (x == null ? '' : String(x).trim());
+const strs = (x) => arr(x).map(str).filter(Boolean);
+function pageNum(p, N) { const n = Math.round(Number(Array.isArray(p) ? p[0] : p)); if (!Number.isFinite(n) || n < 1) return 0; return N ? Math.min(n, N) : n; }
+
+const AIX = {
+  modelOrder() { const pref = LS.get('lecture.model'); const list = [...AI.models]; if (pref && list.includes(pref)) { list.splice(list.indexOf(pref), 1); list.unshift(pref); } return list; },
+  extractText(data) {
+    const c = data && data.candidates && data.candidates[0];
+    if (!c) { if (data && data.promptFeedback && data.promptFeedback.blockReason) throw new AppError('رفضت الخدمة معالجة هذا المحتوى. جرّب ملفًا آخر.'); return ''; }
+    const parts = (c.content && c.content.parts) || [];
+    return parts.filter(p => typeof p.text === 'string' && !p.thought).map(p => p.text).join('');
+  },
+  parse(text) {
+    const s = String(text || '').trim();
+    try { return JSON.parse(s); } catch (e) { /* try to recover below */ }
+    const a = s.indexOf('{'), b = s.lastIndexOf('}');
+    if (a >= 0 && b > a) { try { return JSON.parse(s.slice(a, b + 1)); } catch (e) { /* fall through */ } }
+    throw new AppError('وصلت النتيجة ناقصة. أعد المحاولة.');
+  },
+  async call({ parts, system, json = true, timeout = 120000 }) {
+    needOnline();
+    const key = S.aiKey;
+    if (!key) throw new AppError('حسابك غير مفعّل بعد. أكمل خطوة التفعيل.', 'activate');
+    let lastErr = null;
+    for (const model of this.modelOrder()) {
+      let nextModel = false;
+      for (let attempt = 0; attempt < 2 && !nextModel; attempt++) {
+        const ctrl = new AbortController(); const tm = setTimeout(() => ctrl.abort(), timeout);
+        try {
+          const body = { contents: [{ role: 'user', parts }] };
+          if (system) body.systemInstruction = { parts: [{ text: system }] };
+          if (json) body.generationConfig = { responseMimeType: 'application/json' };
+          const res = await fetch(`${AI.base}/models/${model}:generateContent`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-goog-api-key': key }, body: JSON.stringify(body), signal: ctrl.signal });
+          clearTimeout(tm);
+          if (res.ok) {
+            const data = await res.json();
+            const text = this.extractText(data);
+            if (!text) { lastErr = new AppError('لم تصل نتيجة. أعد المحاولة.'); continue; }
+            LS.set('lecture.model', model);
+            return json ? this.parse(text) : text;
+          }
+          const eb = await res.json().catch(() => ({}));
+          const msg = (eb.error && eb.error.message) || '';
+          if (res.status === 404 || /not found|is not supported|unknown model/i.test(msg)) { lastErr = new AppError('الخدمة غير متاحة الآن. أعد المحاولة لاحقًا.'); nextModel = true; continue; }
+          if (/location|region|country/i.test(msg) && (res.status === 400 || res.status === 403)) throw new AppError('هذه الخدمة غير متاحة في منطقتك حاليًا.');
+          if (res.status === 400 && /api key|api_key/i.test(msg)) throw new AppError('تعذّر التحقق من تفعيل حسابك. أعد خطوة التفعيل من صفحة «حسابي».', 'activate');
+          if (res.status === 401 || res.status === 403) throw new AppError('تعذّر التحقق من تفعيل حسابك. أعد خطوة التفعيل من صفحة «حسابي».', 'activate');
+          if (res.status === 429) throw new AppError('وصلت إلى الحد المسموح الآن. انتظر دقيقة ثم أعد المحاولة، وإن تكرر فحاول غدًا.');
+          if (res.status === 413 || /too large|payload|exceeds/i.test(msg)) throw new AppError('الملف أكبر من المسموح. جرّب ملفًا أصغر أو قسّم المحاضرة.');
+          if (res.status >= 500) { lastErr = new AppError('الخدمة مشغولة الآن. أعد المحاولة بعد قليل.'); await sleep(1500); continue; }
+          throw new AppError('تعذّر إنشاء النتيجة. أعد المحاولة.');
+        } catch (e) {
+          clearTimeout(tm);
+          if (e instanceof AppError) throw e;
+          if (e && e.name === 'AbortError') throw new AppError('استغرق الطلب وقتًا أطول من المتوقع. تحقق من الاتصال وأعد المحاولة.');
+          lastErr = new AppError('تعذّر الاتصال بالخدمة. تحقق من الإنترنت وأعد المحاولة.'); await sleep(800);
+        }
+      }
+    }
+    throw lastErr || new AppError('تعذّر إنشاء النتيجة. أعد المحاولة.');
+  },
+  async validateKey(key) {
+    needOnline();
+    let res;
+    try { res = await withTimeout(fetch(`${AI.base}/models?pageSize=1`, { headers: { 'x-goog-api-key': key } }), 20000); }
+    catch (e) { if (e instanceof AppError) throw e; throw new AppError('تعذّر الاتصال. تحقق من الإنترنت وأعد المحاولة.'); }
+    if (res.ok) return true;
+    const eb = await res.json().catch(() => ({}));
+    const msg = (eb.error && eb.error.message) || '';
+    if (/location|region|country/i.test(msg)) throw new AppError('هذه الخدمة غير متاحة في منطقتك حاليًا.');
+    if (res.status === 400 || res.status === 401 || res.status === 403) return false;
+    throw new AppError('تعذّر التحقق الآن. أعد المحاولة بعد قليل.');
+  }
+};
+
+const SYSTEM_STUDY = 'You are the study engine of "Lecture", an app for pharmacy students. Work ONLY from the lecture data you are given. Never add facts, doses, numbers, drugs or claims that are not in the data. If the data is not enough for the requested number of items, return fewer items. Every item must include "page" (a page number taken from the data) and "section" (the exact section title from the data it comes from). Write clear, exam-ready English. Return ONLY valid JSON in exactly the requested shape, with no markdown.';
+const SYSTEM_DIGEST = 'You extract faithful, complete study digests from pharmacy lecture files. You never invent content. You return ONLY valid JSON.';
+const DIGEST_PROMPT = `Read this pharmacy lecture file. Pages are numbered from 1 in file order. Produce a complete, faithful study digest in this exact JSON shape:
+{"title": string, "subject": string,
+ "sections": [{"title": string, "pages": [int], "points": [{"text": string, "page": int}]}],
+ "keyTerms": [{"term": string, "definition": string, "page": int}],
+ "drugs": [{"name": "generic name", "class": string, "mechanism": string, "uses": [string], "sideEffects": [string], "contraindications": [string], "interactions": [string], "notes": [string], "page": int}],
+ "lists": [{"title": string, "items": [string], "page": int}],
+ "comparisons": [{"title": string, "subjects": [string], "features": [{"feature": string, "values": [string]}], "page": int}],
+ "calculations": [{"topic": string, "formula": string, "example": string, "page": int}],
+ "counterRelevant": boolean}
+Rules: cover every section, fact, number, exception and figure caption; keep the wording faithful to the lecture; one point = one fact; use empty arrays when a category is absent; "values" follow the order of "subjects"; "counterRelevant" is true only if the content can produce realistic community-pharmacy counselling scenarios; write in English even if the lecture mixes languages; never add anything that is not in the file.`;
+
+function normalizeDigest(o, N) {
+  const d = {
+    title: str(o.title), subject: str(o.subject),
+    sections: arr(o.sections).map(s => ({ title: str(s.title), pages: arr(s.pages).map(p => pageNum(p, N)).filter(Boolean), points: arr(s.points).map(p => ({ text: str(p && p.text), page: pageNum(p && p.page, N) })).filter(p => p.text) })).filter(s => s.title && s.points.length),
+    keyTerms: arr(o.keyTerms).map(k => ({ term: str(k.term), definition: str(k.definition), page: pageNum(k.page, N) })).filter(k => k.term && k.definition),
+    drugs: arr(o.drugs).map(x => ({ name: str(x.name), class: str(x.class), mechanism: str(x.mechanism), uses: strs(x.uses), sideEffects: strs(x.sideEffects), contraindications: strs(x.contraindications), interactions: strs(x.interactions), notes: strs(x.notes), page: pageNum(x.page, N) })).filter(x => x.name),
+    lists: arr(o.lists).map(l => ({ title: str(l.title), items: strs(l.items), page: pageNum(l.page, N) })).filter(l => l.title && l.items.length),
+    comparisons: arr(o.comparisons).map(c => ({ title: str(c.title), subjects: strs(c.subjects), features: arr(c.features).map(f => ({ feature: str(f.feature), values: strs(f.values) })).filter(f => f.feature), page: pageNum(c.page, N) })).filter(c => c.subjects.length >= 2 && c.features.length),
+    calculations: arr(o.calculations).map(c => ({ topic: str(c.topic), formula: str(c.formula), example: str(c.example), page: pageNum(c.page, N) })).filter(c => c.topic && (c.formula || c.example)),
+    counterRelevant: o.counterRelevant === true
+  };
+  for (const s of d.sections) if (!s.pages.length) s.pages = [...new Set(s.points.map(p => p.page).filter(Boolean))].sort((a, b) => a - b);
+  if (!d.sections.length) throw new AppError('لم أستطع قراءة محتوى كافٍ من هذا الملف. تأكد أنه محاضرة واضحة وأعد المحاولة.');
+  return d;
+}
+async function aiDigest(fileBlob, pageTexts) {
+  const b64 = await blobToBase64(fileBlob);
+  let text = '';
+  if (pageTexts.join('').trim().length > 200) {
+    for (let i = 0; i < pageTexts.length; i++) { const chunk = `\n[[PAGE ${i + 1}]]\n${pageTexts[i]}`; if (text.length + chunk.length > LIMITS.textCap) break; text += chunk; }
+  }
+  const prompt = DIGEST_PROMPT + (text ? '\n\nThe text layer of the file follows, with page markers. Use these page numbers:\n' + text : '');
+  const out = await AIX.call({ parts: [{ inline_data: { mime_type: 'application/pdf', data: b64 } }, { text: prompt }], system: SYSTEM_DIGEST, timeout: 240000 });
+  return normalizeDigest(out, pageTexts.length);
+}
+
+const LADDER_FIELDS = `Fields by type:
+- "mcq": "question", "options" (exactly 4), "answer" (index 0-3), "analysis" (exactly 4 strings, why each option is right or wrong)
+- "tf": "question" (a statement), "answer" (true or false), "correction" (the corrected statement when false, else ""), "analysis" (1 string)
+- "justify", "enumerate", "compare", "define": "question", "modelAnswer" (a complete exam answer), "analysis" (key points the answer must contain)
+- "calc": "title", "template" (question text with {var} placeholders), "variables" ({"var": {"min": number, "max": number, "step": number}}), "formula" (math using the variable names, numbers, + - * / ^ ( ) and sqrt log ln exp abs round), "unit", "decimals" (int), "steps" (strings that may use {var} and [[expression]] which the app computes)
+Every question also has "type", "golden" (one-sentence rule worth remembering), "page" and "section".`;
+
+function avoidText(prev) { const list = prev.filter(Boolean).slice(0, 40); return list.length ? '\nDo not repeat or rephrase these earlier items:\n- ' + list.join('\n- ') : ''; }
+function sectionData(digest, title) {
+  const s = digest.sections.find(x => x.title === title) || digest.sections[0];
+  const pages = new Set(s.pages);
+  return { section: s, related: { keyTerms: digest.keyTerms.filter(k => pages.has(k.page)), drugs: digest.drugs.filter(x => pages.has(x.page)), lists: digest.lists.filter(x => pages.has(x.page)) } };
+}
+function modePrompt(mode, digest, o = {}) {
+  const data = 'LECTURE DATA:\n' + JSON.stringify(digest);
+  const types = ['mcq', 'tf', 'justify', 'enumerate', 'compare', 'define'].concat(digest.calculations.length ? ['calc'] : []);
+  const P = {
+    simplify: `Explain the lecture section by section for someone outside the field, using everyday analogies, while keeping every key fact correct. JSON: {"sections":[{"title":string,"text":string (80-180 words),"analogy":string,"page":int,"section":string}]}`,
+    diagram: `Build one concept map of the whole lecture. JSON: {"title":string,"nodes":[{"label":string (max 8 words),"page":int,"section":string,"children":[{"label":string,"page":int,"children":[{"label":string,"page":int}]}]}]} Use 3-8 top-level nodes, at most 5 children per node, depth at most 3.`,
+    reels: `Turn the lecture into short reel cards in lecture order. JSON: {"cards":[ {"type":"card","headline":string (max 8 words),"body":string (max 45 words),"page":int,"section":string} or {"type":"quiz","question":string,"options":[4 strings],"answer":int,"explain":string,"page":int,"section":string} ]} After every 3 "card" items insert exactly one "quiz" item about those 3 cards. 9-24 items in total.`,
+    drugs: `For every drug in the data write a profile in which the drug introduces itself in the first person. Use only facts from the data and leave a field empty ("" or []) when the data lacks it. JSON: {"drugs":[{"name":string,"class":string,"intro":string (2-3 sentences starting with "I am"),"mechanism":string,"uses":[string],"sideEffects":[string],"warnings":[string],"interactions":[string],"pearl":string (one memorable fact),"page":int,"section":string}]}`,
+    counter: `Write 5 realistic community-pharmacy counter scenarios that test this lecture. Wrong options must be plausible and non-obvious. JSON: {"cases":[{"scenario":string,"question":string,"options":[4 strings],"answer":int,"analysis":[4 strings, one per option],"golden":string,"page":int,"section":string}]}`,
+    matrix: `Find things in the lecture that students confuse with each other (similar drugs, classes, dosage forms, processes, terms). Build comparison tables and "where is the trap" questions. JSON: {"tables":[{"title":string,"columns":["Feature", string, string, ...],"rows":[[feature, value, value, ...]],"page":int,"section":string}],"traps":[{"question":string,"options":[4 strings],"answer":int,"analysis":[4 strings],"golden":string,"page":int,"section":string}]} 1-4 tables and 3-5 traps. Every row has exactly as many cells as columns.`,
+    mnemonics: `Create memorable English mnemonics for the lists and hard-to-remember facts in the lecture. Every entry of the breakdown must be a real item from the data. JSON: {"mnemonics":[{"topic":string,"mnemonic":string,"breakdown":[{"key":string,"stands":string}],"tip":string,"page":int,"section":string}]} 4-10 items.`,
+    review: `Make a one-page quick-review sheet of the highest-yield points, ranked by how likely they are to appear in an exam. JSON: {"items":[{"point":string (max 25 words),"likelihood":"high"|"medium"|"low","page":int,"section":string}]} 15-30 items sorted from high to low.`,
+    ladder: `Write a question ladder of 10 questions ordered from easy to hard. Use a mix of these types: ${types.join(', ')}. JSON: {"questions":[...]}\n${LADDER_FIELDS}`,
+    spot: `Rewrite the lecture as a faithful summary of 12-16 separate sentences, then plant EXACTLY 5 factual errors in 5 different sentences (a wrong number, a swapped drug, a reversed effect, a wrong class). JSON: {"sentences":[{"text":string,"error":boolean,"correct":string (the correct version, only when error is true, else ""),"page":int,"section":string}]}`,
+    calc: `Create calculation problem templates using only the formulas and methods in the lecture's calculations. JSON: {"problems":[{"title":string,"template":string with {var} placeholders,"variables":{"var":{"min":number,"max":number,"step":number}},"formula":string,"unit":string,"decimals":int,"steps":[string],"page":int,"section":string}]} 3-6 problems. Variable names use letters only. "formula" uses the variable names, numbers, + - * / ^ ( ) and sqrt log ln exp abs round, and computes the final answer. Ranges must be realistic. "steps" may use {var} and [[expression]], which the app computes.`
+  };
+  let p = P[mode] + avoidText(o.avoid || []);
+  if (o.fix) p += `\nA pharmacist reviewer confirmed that this item in your previous output is WRONG:\n"${o.fix.itemText}"\nReported problem: ${o.fix.reason}${o.fix.note ? ' — ' + o.fix.note : ''}\nRegenerate the full output and correct this error strictly according to the lecture data.`;
+  return p + '\n\n' + data;
+}
+
+/* ---------- validation of each method's result ---------- */
+const mcqOk = (q) => q && str(q.question) && arr(q.options).length >= 2 && Number.isInteger(q.answer) && q.answer >= 0 && q.answer < arr(q.options).length;
+function normItem(x, N) { return Object.assign({}, x, { page: pageNum(x.page, N), section: str(x.section) }); }
+function normalizeOutput(mode, o, N) {
+  let r;
+  switch (mode) {
+    case 'simplify': r = { sections: arr(o.sections).filter(s => str(s.text)).map(s => normItem({ title: str(s.title), text: str(s.text), analogy: str(s.analogy), page: s.page, section: s.section }, N)) }; if (!r.sections.length) r = null; break;
+    case 'diagram': {
+      const node = (n, depth) => ({ label: str(n.label), page: pageNum(n.page, N), section: str(n.section), children: depth < 3 ? arr(n.children).filter(c => str(c && c.label)).slice(0, 6).map(c => node(c, depth + 1)) : [] });
+      r = { title: str(o.title), nodes: arr(o.nodes).filter(n => str(n && n.label)).slice(0, 10).map(n => node(n, 1)) }; if (!r.nodes.length) r = null; break;
+    }
+    case 'reels': r = { cards: arr(o.cards).map(c => c.type === 'quiz' ? (mcqOk(c) ? normItem({ type: 'quiz', question: str(c.question), options: strs(c.options), answer: c.answer, explain: str(c.explain), page: c.page, section: c.section }, N) : null) : (str(c.body) ? normItem({ type: 'card', headline: str(c.headline), body: str(c.body), page: c.page, section: c.section }, N) : null)).filter(Boolean) }; if (!r.cards.some(c => c.type === 'card')) r = null; break;
+    case 'drugs': r = { drugs: arr(o.drugs).filter(x => str(x.name)).map(x => normItem({ name: str(x.name), class: str(x.class), intro: str(x.intro), mechanism: str(x.mechanism), uses: strs(x.uses), sideEffects: strs(x.sideEffects), warnings: strs(x.warnings), interactions: strs(x.interactions), pearl: str(x.pearl), page: x.page, section: x.section }, N)) }; if (!r.drugs.length) r = null; break;
+    case 'counter': r = { cases: arr(o.cases).filter(c => mcqOk(c) && str(c.scenario)).map(c => normItem({ scenario: str(c.scenario), question: str(c.question), options: strs(c.options), answer: c.answer, analysis: strs(c.analysis), golden: str(c.golden), page: c.page, section: c.section }, N)) }; if (!r.cases.length) r = null; break;
+    case 'matrix': {
+      const tables = arr(o.tables).map(tb => { const cols = strs(tb.columns); const rows = arr(tb.rows).map(rw => arr(rw).map(str)).filter(rw => rw.length >= 2).map(rw => cols.length ? rw.slice(0, cols.length).concat(Array(Math.max(0, cols.length - rw.length)).fill('')) : rw); return normItem({ title: str(tb.title), columns: cols, rows, page: tb.page, section: tb.section }, N); }).filter(tb => tb.columns.length >= 2 && tb.rows.length);
+      const traps = arr(o.traps).filter(mcqOk).map(q => normItem({ question: str(q.question), options: strs(q.options), answer: q.answer, analysis: strs(q.analysis), golden: str(q.golden), page: q.page, section: q.section }, N));
+      r = { tables, traps }; if (!tables.length && !traps.length) r = null; break;
+    }
+    case 'mnemonics': r = { mnemonics: arr(o.mnemonics).filter(m => str(m.mnemonic)).map(m => normItem({ topic: str(m.topic), mnemonic: str(m.mnemonic), breakdown: arr(m.breakdown).map(b => ({ key: str(b && b.key), stands: str(b && b.stands) })).filter(b => b.key && b.stands), tip: str(m.tip), page: m.page, section: m.section }, N)) }; if (!r.mnemonics.length) r = null; break;
+    case 'review': { const rank = { high: 0, medium: 1, low: 2 }; r = { items: arr(o.items).filter(i => str(i.point)).map(i => normItem({ point: str(i.point), likelihood: rank[i.likelihood] != null ? i.likelihood : 'medium', page: i.page, section: i.section }, N)).sort((a, b) => rank[a.likelihood] - rank[b.likelihood]) }; if (!r.items.length) r = null; break; }
+    case 'ladder': r = { questions: arr(o.questions).map(q => normQuestion(q, N)).filter(Boolean) }; if (!r.questions.length) r = null; break;
+    case 'spot': {
+      const s = arr(o.sentences).filter(x => str(x.text)).map(x => normItem({ text: str(x.text), error: x.error === true, correct: x.error === true ? str(x.correct) : '', page: x.page, section: x.section }, N));
+      r = { sentences: s }; if (s.length < 6 || !s.some(x => x.error)) r = null; break;
+    }
+    case 'calc': r = { problems: arr(o.problems).map(p => Calc.normalize(p, N)).filter(Boolean) }; if (!r.problems.length) r = null; break;
+    case 'teach': r = { score: Math.max(0, Math.min(10, Math.round(Number(o.score) || 0))), correct: strs(o.correct), missing: strs(o.missing), wrong: arr(o.wrong).map(w => ({ said: str(w.said), fix: str(w.fix), page: pageNum(w.page, N) })).filter(w => w.fix), summary: str(o.summary), page: pageNum(o.page, N), section: str(o.section) }; break;
+    default: r = null;
+  }
+  if (!r) throw new AppError('لم تصلح النتيجة لهذه المحاضرة. أعد المحاولة.');
+  return r;
+}
+function normQuestion(q, N) {
+  if (!q) return null;
+  const base = { type: str(q.type), golden: str(q.golden), page: pageNum(q.page, N), section: str(q.section) };
+  if (q.type === 'mcq') return mcqOk(q) ? Object.assign(base, { question: str(q.question), options: strs(q.options), answer: q.answer, analysis: strs(q.analysis) }) : null;
+  if (q.type === 'tf') return str(q.question) && typeof q.answer === 'boolean' ? Object.assign(base, { question: str(q.question), answer: q.answer, correction: str(q.correction), analysis: strs(q.analysis) }) : null;
+  if (['justify', 'enumerate', 'compare', 'define'].includes(q.type)) return str(q.question) && str(q.modelAnswer) ? Object.assign(base, { question: str(q.question), modelAnswer: str(q.modelAnswer), analysis: strs(q.analysis) }) : null;
+  if (q.type === 'calc') { const c = Calc.normalize(q, N); return c ? Object.assign(base, c, { type: 'calc' }) : null; }
+  return null;
+}
+
+/* ---------- translation: only text fields change, structure and answers stay ---------- */
+const TR_KEYS = new Set(['text', 'title', 'analogy', 'label', 'headline', 'body', 'question', 'options', 'explain', 'class', 'intro', 'mechanism', 'uses', 'sideEffects', 'warnings', 'interactions', 'pearl', 'scenario', 'analysis', 'golden', 'columns', 'rows', 'topic', 'tip', 'stands', 'point', 'correct', 'correction', 'modelAnswer', 'template', 'steps', 'summary', 'missing', 'fix']);
+function mergeTr(orig, tr, key) {
+  if (typeof orig === 'string') return (TR_KEYS.has(key) && typeof tr === 'string' && tr.trim()) ? tr.trim() : orig;
+  if (Array.isArray(orig)) return orig.map((o, i) => mergeTr(o, Array.isArray(tr) ? tr[i] : undefined, key));
+  if (orig && typeof orig === 'object') {
+    const res = {};
+    for (const k of Object.keys(orig)) res[k] = (k === 'variables' || k === 'formula') ? orig[k] : mergeTr(orig[k], tr && tr[k], k);
+    if (tr && typeof tr.meaningAr === 'string' && tr.meaningAr.trim()) res.meaningAr = tr.meaningAr.trim();
+    return res;
+  }
+  return orig;
+}
+async function aiTranslate(mode, content) {
+  const extra = mode === 'mnemonics' ? ' Do NOT translate "mnemonic" or "key" values. For each "stands" value keep the English word and add its Arabic meaning after it. Add to each mnemonic a field "meaningAr": an Arabic explanation of what the mnemonic stands for and how to use it.' : '';
+  const prompt = `Translate every human-readable string value in this JSON into Modern Standard Arabic for a pharmacy student. Keep all keys, numbers, booleans, "page" and "section" values unchanged. Keep drug names, units, chemical names and technical English terms in English (you may add the Arabic term in parentheses after an English term). Keep {placeholders} and [[expressions]] exactly as they are.${extra} Return JSON with exactly the same structure.\n\n${JSON.stringify(content)}`;
+  const tr = await AIX.call({ parts: [{ text: prompt }], system: 'You are a precise English-to-Arabic translator for pharmacy education. Return ONLY valid JSON.' });
+  return mergeTr(content, tr, '');
+}
+
+/* ============================== CALCULATION ENGINE (answers computed here, not by the model) ============================== */
+const Calc = {
+  FUNCS: { sqrt: Math.sqrt, log: Math.log10, ln: Math.log, exp: Math.exp, abs: Math.abs, round: Math.round, floor: Math.floor, ceil: Math.ceil },
+  tokens(src) {
+    const s = String(src).replace(/×/g, '*').replace(/÷/g, '/').replace(/\*\*/g, '^');
+    const out = []; let i = 0;
+    while (i < s.length) {
+      const c = s[i];
+      if (/\s/.test(c)) { i++; continue; }
+      if (/[0-9.]/.test(c)) {
+        let j = i; while (j < s.length && /[0-9.]/.test(s[j])) j++;
+        if ((s[j] === 'e' || s[j] === 'E') && (/[0-9]/.test(s[j + 1] || '') || (/[+-]/.test(s[j + 1] || '') && /[0-9]/.test(s[j + 2] || '')))) { j += 2; while (j < s.length && /[0-9]/.test(s[j])) j++; }
+        const n = Number(s.slice(i, j)); if (!Number.isFinite(n)) throw new Error('bad number'); out.push({ t: 'num', v: n }); i = j; continue;
+      }
+      if (/[A-Za-z_]/.test(c)) { let j = i; while (j < s.length && /[A-Za-z_0-9]/.test(s[j])) j++; out.push({ t: 'id', v: s.slice(i, j) }); i = j; continue; }
+      if ('+-*/^()'.includes(c)) { out.push({ t: 'op', v: c }); i++; continue; }
+      throw new Error('bad char');
+    }
+    return out;
+  },
+  compile(src) {
+    const toks = this.tokens(src); const out = []; const st = [];
+    const prec = { '+': 1, '-': 1, '*': 2, '/': 2, 'neg': 3, '^': 4 }; const rightAssoc = { '^': true, 'neg': true };
+    let prev = null;
+    for (const tk of toks) {
+      if (tk.t === 'num') out.push(tk);
+      else if (tk.t === 'id') { const f = tk.v.toLowerCase(); if (this.FUNCS[f]) st.push({ t: 'fn', v: f }); else out.push({ t: 'var', v: tk.v }); }
+      else if (tk.v === '(') st.push(tk);
+      else if (tk.v === ')') { while (st.length && st[st.length - 1].v !== '(') out.push(st.pop()); if (!st.length) throw new Error('paren'); st.pop(); if (st.length && st[st.length - 1].t === 'fn') out.push(st.pop()); }
+      else {
+        const unaryPos = !prev || (prev.t === 'op' && prev.v !== ')');
+        if (tk.v === '+' && unaryPos) { prev = tk; continue; }
+        const op = (tk.v === '-' && unaryPos) ? 'neg' : tk.v;
+        while (st.length) { const top = st[st.length - 1]; if (top.v === '(') break; if (top.t === 'fn') { out.push(st.pop()); continue; } const pt = prec[top.v], po = prec[op]; if (pt > po || (pt === po && !rightAssoc[op])) out.push(st.pop()); else break; }
+        st.push({ t: 'op', v: op });
+      }
+      prev = tk;
+    }
+    while (st.length) { const x = st.pop(); if (x.v === '(' || x.v === ')') throw new Error('paren'); out.push(x); }
+    return out;
+  },
+  run(rpn, vars) {
+    const st = [];
+    for (const tk of rpn) {
+      if (tk.t === 'num') st.push(tk.v);
+      else if (tk.t === 'var') { if (!(tk.v in vars)) throw new Error('unknown variable ' + tk.v); st.push(vars[tk.v]); }
+      else if (tk.t === 'fn') { if (!st.length) throw new Error('arity'); st.push(this.FUNCS[tk.v](st.pop())); }
+      else if (tk.v === 'neg') { if (!st.length) throw new Error('arity'); st.push(-st.pop()); }
+      else { if (st.length < 2) throw new Error('arity'); const b = st.pop(), a = st.pop(); st.push(tk.v === '+' ? a + b : tk.v === '-' ? a - b : tk.v === '*' ? a * b : tk.v === '/' ? a / b : Math.pow(a, b)); }
+    }
+    if (st.length !== 1 || !Number.isFinite(st[0])) throw new Error('result');
+    return st[0];
+  },
+  evaluate(expr, vars) { return this.run(this.compile(expr), vars); },
+  stepDecimals(step) { const s = String(step); return s.includes('.') ? s.split('.')[1].length : 0; },
+  randomVars(variables) {
+    const v = {};
+    for (const [name, r] of Object.entries(variables)) {
+      const step = r.step > 0 ? r.step : 1; const count = Math.floor((r.max - r.min) / step + 1e-9);
+      const a = new Uint32Array(1); crypto.getRandomValues(a);
+      const k = count > 0 ? a[0] % (count + 1) : 0;
+      v[name] = Number((r.min + k * step).toFixed(this.stepDecimals(step)));
+    }
+    return v;
+  },
+  fmt(x, d) { const n = Number(x); if (!Number.isFinite(n)) return '—'; return String(Number(n.toFixed(Math.max(0, Math.min(6, d))))); },
+  fill(text, vars, d) {
+    return String(text).replace(/\[\[([^\]]+)\]\]/g, (m, e) => { try { return this.fmt(this.evaluate(e, vars), d); } catch (er) { return '—'; } })
+      .replace(/\{([A-Za-z_][A-Za-z_0-9]*)\}/g, (m, name) => name in vars ? this.fmt(vars[name], 6) : m);
+  },
+  check(input, answer, d) {
+    const s = toWestern(input).replace(/,/g, '.').replace(/[^0-9.+\-eE]/g, '');
+    const x = Number(s); if (s === '' || !Number.isFinite(x)) return null;
+    const tol = Math.max(0.5 * Math.pow(10, -d), Math.abs(answer) * 0.01);
+    return Math.abs(x - answer) <= tol;
+  },
+  normalize(p, N) {
+    if (!p || !str(p.template) || !str(p.formula) || !p.variables || typeof p.variables !== 'object') return null;
+    const variables = {};
+    for (const [k, r] of Object.entries(p.variables)) {
+      if (!/^[A-Za-z_][A-Za-z_0-9]*$/.test(k) || !r) return null;
+      const min = Number(r.min), max = Number(r.max), step = Number(r.step);
+      if (!Number.isFinite(min) || !Number.isFinite(max) || max < min) return null;
+      variables[k] = { min, max, step: Number.isFinite(step) && step > 0 ? step : (max - min) / 20 || 1 };
+    }
+    const decimals = Math.max(0, Math.min(4, Math.round(Number(p.decimals)) || 0));
+    try {
+      const rpn = this.compile(p.formula);
+      for (let i = 0; i < 5; i++) this.run(rpn, this.randomVars(variables));
+    } catch (e) { return null; }
+    return { title: str(p.title), template: str(p.template), variables, formula: str(p.formula), unit: str(p.unit), decimals, steps: strs(p.steps), page: pageNum(p.page, N), section: str(p.section), golden: str(p.golden) };
+  },
+  instance(p) {
+    for (let i = 0; i < 20; i++) {
+      const vars = this.randomVars(p.variables);
+      try { const ans = this.evaluate(p.formula, vars); if (Number.isFinite(ans)) return { vars, answer: ans }; } catch (e) { /* draw again */ }
+    }
+    return null;
+  }
+};
+
+/* ============================== SURVIVAL PLAN (schedule computed here) ============================== */
+const DAY_MS = 864e5;
+function startOfDay(ms) { const d = new Date(ms); d.setHours(0, 0, 0, 0); return d.getTime(); }
+function buildSchedule(items, examMs, hoursPerDay, nowMs) {
+  const start = startOfDay(nowMs), exam = startOfDay(examMs);
+  const nDays = Math.round((exam - start) / DAY_MS);
+  if (nDays < 1) throw new AppError('اختر موعد امتحان بعد اليوم.');
+  const cap = Math.max(30, Math.round(hoursPerDay * 60));
+  const days = Array.from({ length: nDays }, (_, i) => ({ date: start + i * DAY_MS, sessions: [], used: 0 }));
+  const eve = nDays >= 2 ? nDays - 1 : -1;
+  const studyDays = eve >= 0 ? eve : nDays;
+  const pick = (it) => ({ lectureId: it.lectureId, lectureTitle: it.lectureTitle, section: it.section });
+  if (eve >= 0) {
+    const seen = new Set();
+    for (const it of items) { if (seen.has(it.lectureId)) continue; seen.add(it.lectureId); days[eve].sessions.push({ type: 'quick', lectureId: it.lectureId, lectureTitle: it.lectureTitle, section: '', minutes: 20 }); days[eve].used += 20; }
+  }
+  const queue = [...items].sort((a, b) => (Number(b.keep) - Number(a.keep)) || (a.priority - b.priority));
+  let pending = [];
+  for (let i = 0; i < studyDays; i++) {
+    const day = days[i];
+    pending.sort((a, b) => a.due - b.due);
+    for (const r of pending) { if (r.due <= i && day.used + r.minutes <= cap) { day.sessions.push(Object.assign({ type: 'review', minutes: r.minutes }, pick(r.it))); day.used += r.minutes; r.done = true; } }
+    pending = pending.filter(r => !r.done);
+    while (queue.length) {
+      const it = queue[0]; const m = Math.max(15, Math.min(240, Math.round(it.minutes || 45)));
+      if (day.used === 0 || day.used + m <= cap) {
+        queue.shift(); day.sessions.push(Object.assign({ type: 'study', minutes: m }, pick(it))); day.used += m;
+        for (const gap of [1, 3, 7]) if (i + gap < studyDays) pending.push({ due: i + gap, it, minutes: Math.max(10, Math.round(m * 0.3)) });
+      } else break;
+    }
+  }
+  return { days: days.map(d => ({ date: d.date, sessions: d.sessions, used: d.used })), overflow: queue.map(it => Object.assign({ keep: !!it.keep }, pick(it))) };
+}
+async function aiPlanTriage(lectures, weak, nDays, hours) {
+  const payload = lectures.map(l => ({ lectureId: l.id, lectureTitle: l.title, sections: l.digest.sections.map(s => ({ section: s.title, points: s.points.length })) }));
+  const prompt = `أنت مخطط مذاكرة لطالب صيدلة. عدد الأيام المتبقية على امتحانه: ${nDays}. عدد ساعات المذاكرة المتاحة يوميًا: ${hours}. هذه أقسام محاضراته مع عدد النقاط في كل قسم، وهذه أخطاؤه السابقة لكل قسم. افرز الأقسام: ما لا يُترك أبدًا، وما يمكن تركه إن ضاق الوقت، ورتّب الأولوية، وقدّر دقائق المذاكرة الأولى لكل قسم.
+أعد JSON بهذا الشكل فقط: {"items":[{"lectureId":string,"section":string (اسم القسم كما هو حرفيًا),"priority":1|2|3 (1 الأعلى),"keep":boolean,"reason":string (جملة عربية قصيرة),"minutes":int}],"advice":string (جملتان بالعربية)}
+المحاضرات: ${JSON.stringify(payload)}
+الأخطاء السابقة: ${JSON.stringify(weak)}`;
+  const o = await AIX.call({ parts: [{ text: prompt }], system: 'You plan study schedules for pharmacy students. Use only the sections given. Return ONLY valid JSON.' });
+  const known = new Map(); for (const l of lectures) for (const s of l.digest.sections) known.set(l.id + '|' + s.title, l.title);
+  const items = arr(o.items).map(x => ({ lectureId: str(x.lectureId), section: str(x.section), priority: [1, 2, 3].includes(Number(x.priority)) ? Number(x.priority) : 2, keep: x.keep !== false, reason: str(x.reason), minutes: Math.round(Number(x.minutes)) || 45 }))
+    .filter(x => known.has(x.lectureId + '|' + x.section)).map(x => Object.assign(x, { lectureTitle: known.get(x.lectureId + '|' + x.section) }));
+  for (const l of lectures) for (const s of l.digest.sections) if (!items.some(x => x.lectureId === l.id && x.section === s.title)) items.push({ lectureId: l.id, lectureTitle: l.title, section: s.title, priority: 2, keep: true, reason: '', minutes: 30 + s.points.length * 3 });
+  return { items, advice: str(o.advice) };
+}
+
+/* ============================== RENDERERS ============================== */
+const L = (ctx, en, ar) => ctx.lang === 'ar' ? ar : en;
+const LETTERS = ['A', 'B', 'C', 'D', 'E', 'F'];
+const QTYPE = { mcq: 'اختيار من متعدد', tf: 'صح أو خطأ', justify: 'علّل', enumerate: 'عدّد', compare: 'قارن', define: 'عرّف', calc: 'مسألة حسابية' };
+function itemHead(title, item, ctx, path, level = 'h3') {
+  return h('div', { class: 'itemhead' }, title ? t(level, title) : h('span'), h('div', { class: 'row' }, pageBadge(item.page), ctx.flag ? ctx.flag(path, item) : null));
+}
+function itemText(item) {
+  const parts = [item.title, item.headline, item.scenario, item.question, item.text, item.body, item.point, item.label, item.name, item.intro, item.mnemonic, item.modelAnswer, item.template]
+    .filter(x => typeof x === 'string' && x);
+  if (Array.isArray(item.options)) parts.push(item.options.map((o, i) => (i === item.answer ? '✔ ' : '') + LETTERS[i] + ') ' + o).join(' | '));
+  if (Array.isArray(item.rows)) parts.push(item.rows.map(r => r.join(' / ')).join(' ; '));
+  if (item.error) parts.push('Planted error, correct version: ' + item.correct);
+  return parts.join('\n').slice(0, 1500);
+}
+function goldenBox(text, ctx) { return text ? h('div', { class: 'golden', dir: 'rtl' }, h('span', { class: 'lbl' }, 'العبارة الذهبية:'), t('span', text)) : null; }
+function listBlock(label, items) { return items && items.length ? h('div', { class: 'kv' }, h('div', { class: 'k', dir: 'auto' }, label), h('ul', { class: 'clean' }, items.map(x => t('li', x)))) : null; }
+
+function renderOutput(mode, data, ctx) {
+  const box = h('div', { class: 'content', dir: ctx.lang === 'ar' ? 'rtl' : 'ltr', lang: ctx.lang === 'ar' ? 'ar' : 'en' });
+  const R = {
+    simplify() {
+      data.sections.forEach((s, i) => box.append(h('article', { class: 'card item' }, itemHead(s.title, s, ctx, 'sections.' + i), t('p', s.text),
+        s.analogy ? h('div', { class: 'analogy' }, icon('bulb', 20), t('span', s.analogy)) : null)));
+    },
+    diagram() {
+      const node = (n, depth, path) => h('li', null,
+        h('span', { class: 'node l' + depth }, t('span', n.label), depth === 1 ? null : pageBadge(n.page), depth === 1 && ctx.flag ? ctx.flag(path, n) : null),
+        n.children && n.children.length ? h('ul', null, n.children.map((c, j) => node(c, depth + 1, path + '.children.' + j))) : null);
+      box.append(h('div', { class: 'card' },
+        h('ul', { class: 'tree' }, h('li', null, h('span', { class: 'node l0' }, t('span', data.title || L(ctx, 'Lecture map', 'خريطة المحاضرة'))),
+          h('ul', null, data.nodes.map((n, i) => node(n, 1, 'nodes.' + i)))))));
+    },
+    reels() { box.append(reelsView(data.cards, ctx)); },
+    drugs() {
+      data.drugs.forEach((d, i) => {
+        const initials = d.name.replace(/[^A-Za-z]/g, '').slice(0, 2).toUpperCase() || 'Rx';
+        box.append(h('article', { class: 'card item' },
+          h('div', { class: 'itemhead' }, h('div', { class: 'drug-head' }, h('div', { class: 'avatar', 'aria-hidden': 'true' }, initials), h('div', null, h('h3', { class: 'ltr', dir: 'ltr' }, d.name), d.class ? t('span', d.class, 'chip') : null)),
+            h('div', { class: 'row' }, pageBadge(d.page), ctx.flag ? ctx.flag('drugs.' + i, d) : null)),
+          d.intro ? t('p', d.intro, 'intro') : null,
+          d.mechanism ? h('div', { class: 'kv' }, h('div', { class: 'k', dir: 'auto' }, L(ctx, 'How I work', 'كيف أعمل')), t('p', d.mechanism)) : null,
+          listBlock(L(ctx, 'What I treat', 'ماذا أعالج'), d.uses), listBlock(L(ctx, 'Side effects', 'الأعراض الجانبية'), d.sideEffects),
+          listBlock(L(ctx, 'Warnings', 'تحذيرات'), d.warnings), listBlock(L(ctx, 'Interactions', 'التداخلات'), d.interactions),
+          d.pearl ? h('div', { class: 'golden', dir: 'rtl' }, h('span', { class: 'lbl' }, 'معلومة ذهبية:'), t('span', d.pearl)) : null));
+      });
+    },
+    counter() { box.append(quizView(data.cases.map(c => Object.assign({ type: 'mcq' }, c)), ctx, 'cases')); },
+    matrix() {
+      data.tables.forEach((tb, i) => box.append(h('article', { class: 'card item' }, itemHead(tb.title, tb, ctx, 'tables.' + i),
+        h('div', { class: 'tablewrap', tabindex: '0', role: 'region', 'aria-label': tb.title || 'جدول' }, h('table', { class: 'mx' },
+          h('thead', null, h('tr', null, tb.columns.map(c => t('th', c)))),
+          h('tbody', null, tb.rows.map(r => h('tr', null, r.map(c => t('td', c))))))))));
+      if (data.traps.length) { box.append(h('h3', { style: 'margin-top:24px', dir: 'rtl' }, 'أين الفخ؟')); box.append(quizView(data.traps.map(q => Object.assign({ type: 'mcq' }, q)), ctx, 'traps')); }
+    },
+    mnemonics() {
+      data.mnemonics.forEach((m, i) => box.append(h('article', { class: 'card item' }, itemHead(m.topic, m, ctx, 'mnemonics.' + i),
+        h('div', { class: 'mnemo', dir: 'ltr' }, m.mnemonic),
+        m.breakdown.length ? h('div', { class: 'bd' }, m.breakdown.map(b => [h('span', { class: 'k', dir: 'ltr' }, b.key), t('span', b.stands)])) : null,
+        m.tip ? t('p', m.tip, 'small muted') : null,
+        m.meaningAr ? h('div', { class: 'note', style: 'margin-top:8px' }, t('span', m.meaningAr)) : null)));
+    },
+    review() {
+      box.append(h('div', { class: 'note', dir: 'rtl' }, 'استعمل هذه الصفحة في الأيام التي تسبق الامتحان، لا في يوم الامتحان نفسه.'));
+      const groups = [['high', L(ctx, 'Very likely in the exam', 'احتمال وروده عالٍ'), 'var(--red)'], ['medium', L(ctx, 'Likely', 'احتمال متوسط'), 'var(--amber)'], ['low', L(ctx, 'Possible', 'احتمال أقل'), 'var(--green)']];
+      for (const [k, label, color] of groups) {
+        const items = data.items.map((x, i) => [x, i]).filter(([x]) => x.likelihood === k);
+        if (!items.length) continue;
+        box.append(h('div', { class: 'lik', dir: 'auto' }, h('i', { style: 'background:' + color }), label));
+        box.append(h('div', { class: 'card flat' }, items.map(([x, i]) => h('div', { class: 'item spread', style: 'align-items:flex-start;flex-wrap:nowrap' }, t('div', '• ' + x.point), h('div', { class: 'row', style: 'flex-wrap:nowrap' }, pageBadge(x.page), ctx.flag ? ctx.flag('items.' + i, x) : null)))));
+      }
+    },
+    ladder() { box.append(quizView(data.questions, ctx, 'questions')); },
+    spot() { box.append(spotView(data.sentences, ctx)); },
+    teach() { box.append(teachFeedback(data, ctx)); },
+    calc() { box.append(calcSetView(data.problems, ctx)); }
+  };
+  R[mode]();
+  return box;
+}
+
+/* ---------- reels ---------- */
+function reelsView(cards, ctx) {
+  if (ctx.reveal) return h('div', { class: 'reels' }, cards.map((c, i) => reelCard(c, i, cards.length, ctx, null)));
+  const quizIdx = cards.map((c, i) => c.type === 'quiz' ? i : -1).filter(i => i >= 0);
+  const answers = {}; let reported = false;
+  const track = h('div', { class: 'reels', tabindex: '0', 'aria-label': 'بطاقات المحاضرة' });
+  const pos = h('span', { class: 'small muted' }, '1 / ' + cards.length);
+  cards.forEach((c, i) => track.append(reelCard(c, i, cards.length, ctx, (ok) => {
+    answers[i] = ok;
+    if (!reported && quizIdx.every(q => q in answers)) {
+      reported = true;
+      const wrong = quizIdx.filter(q => !answers[q]).map(q => ({ section: cards[q].section, page: cards[q].page, text: cards[q].question.slice(0, 160) }));
+      ctx.onResult && ctx.onResult({ score: quizIdx.length - wrong.length, total: quizIdx.length, wrongPoints: wrong });
+    }
+  })));
+  const go = (dir) => { const w = track.clientWidth; const cur = Math.round(Math.abs(track.scrollLeft) / (w + 12)); const next = Math.max(0, Math.min(cards.length - 1, cur + dir)); const el = track.children[next]; if (el) el.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' }); };
+  track.addEventListener('scroll', () => { const w = track.clientWidth; pos.textContent = (Math.min(cards.length, Math.round(Math.abs(track.scrollLeft) / (w + 12)) + 1)) + ' / ' + cards.length; }, { passive: true });
+  return h('div', null, track, h('div', { class: 'spread', style: 'margin-top:8px' },
+    h('button', { class: 'btn btn-ghost btn-sm', type: 'button', onclick: () => go(-1) }, 'السابقة'), pos,
+    h('button', { class: 'btn btn-primary btn-sm', type: 'button', onclick: () => go(1) }, 'التالية')));
+}
+function reelCard(c, i, n, ctx, onAnswer) {
+  const head = h('div', { class: 'spread' }, h('span', { class: 'small', style: 'opacity:.85' }, (i + 1) + ' / ' + n), h('div', { class: 'row' }, pageBadge(c.page), ctx.flag ? ctx.flag('cards.' + i, c) : null));
+  if (c.type === 'card') return h('section', { class: 'reel' }, head, c.headline ? t('h3', c.headline) : null, t('div', c.body, 'body'));
+  const out = h('div', { class: 'analysis', hidden: !ctx.reveal }, t('p', c.explain));
+  const opts = h('div', { class: 'opts' }, c.options.map((o, j) => {
+    const b = h('button', { class: 'opt' + (ctx.reveal && j === c.answer ? ' right' : ''), type: 'button', disabled: !!ctx.reveal, onclick() {
+      [...opts.children].forEach((x, k) => { x.disabled = true; if (k === c.answer) x.classList.add('right'); });
+      if (j !== c.answer) b.classList.add('wrong');
+      out.hidden = false; onAnswer && onAnswer(j === c.answer);
+    } }, h('span', { class: 'k' }, LETTERS[j]), t('span', o));
+    return b;
+  }));
+  return h('section', { class: 'reel quiz' }, head, h('span', { class: 'chip' }, 'سؤال سريع'), t('h3', c.question), opts, out);
+}
+
+/* ---------- question engine: one question at a time with capsule progress ---------- */
+function quizView(questions, ctx, base) {
+  const wrap = h('div', { class: 'stack' });
+  if (ctx.reveal) { questions.forEach((q, i) => wrap.append(questionCard(q, i, questions.length, ctx, base, { reveal: true }))); return wrap; }
+  let idx = 0; const results = questions.map(() => null);
+  const caps = h('div', { class: 'caps', 'aria-hidden': 'true' });
+  const counter = h('div', { class: 'small muted', dir: 'rtl' });
+  const holder = h('div');
+  const nextBtn = h('button', { class: 'btn btn-primary btn-block', type: 'button', hidden: true, onclick() { if (idx < questions.length - 1) { idx++; show(); wrap.scrollIntoView({ block: 'start', behavior: 'smooth' }); } else finish(); } });
+  function drawCaps() {
+    caps.textContent = '';
+    questions.forEach((_, i) => { const c = h('i'); const cls = []; if (results[i] === true) cls.push('on'); if (results[i] === false) cls.push('bad'); if (i === idx) cls.push('cur'); c.className = cls.join(' '); caps.append(c); });
+    counter.textContent = 'السؤال ' + (idx + 1) + ' من ' + questions.length;
+  }
+  function show() {
+    holder.textContent = ''; drawCaps();
+    holder.append(questionCard(questions[idx], idx, questions.length, ctx, base, { onAnswered(ok) { results[idx] = ok; drawCaps(); nextBtn.hidden = false; } }));
+    nextBtn.hidden = results[idx] == null;
+    nextBtn.textContent = idx === questions.length - 1 ? 'أظهر النتيجة' : 'السؤال التالي';
+  }
+  function finish() {
+    const score = results.filter(r => r === true).length;
+    const wrongPoints = questions.filter((q, i) => results[i] === false).map(q => ({ section: q.section || '', page: q.page || 0, text: (q.question || q.title || q.scenario || '').slice(0, 160) }));
+    holder.textContent = ''; nextBtn.hidden = true; caps.parentNode && (counter.textContent = 'انتهت المجموعة');
+    holder.append(resultView(score, questions.length, wrongPoints, () => { idx = 0; results.fill(null); show(); }));
+    ctx.onResult && ctx.onResult({ score, total: questions.length, wrongPoints });
+  }
+  wrap.append(h('div', { class: 'spread' }, counter, caps), holder, nextBtn);
+  show();
+  return wrap;
+}
+function resultView(score, total, wrongPoints, onRetry) {
+  const pct = total ? Math.round(score / total * 100) : 0;
+  const msg = pct >= 80 ? 'ممتاز، أنت جاهز لهذا الجزء.' : pct >= 50 ? 'جيد، راجع النقاط أدناه ثم أعد المحاولة.' : 'تحتاج مراجعة هذا الجزء. ابدأ بالنقاط أدناه.';
+  return h('div', { class: 'card stack', dir: 'rtl' },
+    h('div', { class: 'score' }, h('div', { class: 'ring', style: '--p:' + pct }, h('span', { dir: 'ltr' }, score + '/' + total)), h('div', null, h('h3', null, 'نتيجتك'), h('p', { class: 'muted small' }, msg))),
+    wrongPoints.length ? h('div', null, h('div', { class: 'small', style: 'font-weight:700' }, 'راجع هذه النقاط:'), h('ul', { class: 'clean small' }, wrongPoints.map(w => h('li', null, t('span', w.text), ' ', pageBadge(w.page))))) : null,
+    h('p', { class: 'xs muted' }, 'أُضيفت أخطاؤك إلى «نقاط ضعفي».'),
+    h('button', { class: 'btn btn-ghost', type: 'button', onclick: onRetry }, icon('refresh', 20), 'أعد المحاولة'));
+}
+function questionCard(q, i, n, ctx, base, o) {
+  const path = base + '.' + i;
+  const card = h('article', { class: 'card item' });
+  card.append(h('div', { class: 'itemhead' }, h('span', { class: 'chip' }, QTYPE[q.type] || 'سؤال'), h('div', { class: 'row' }, pageBadge(q.page), ctx.flag ? ctx.flag(path, q) : null)));
+  if (q.scenario) card.append(t('p', q.scenario, 'muted'));
+  if (q.type === 'calc') { card.append(calcProblem(q, ctx, o)); return card; }
+  card.append(t('h3', q.question, null));
+  const after = h('div', { hidden: !o.reveal });
+  const fillAfter = () => {
+    after.textContent = '';
+    if (q.type === 'tf' && q.answer === false && q.correction) after.append(h('div', { class: 'okbox small', style: 'margin-top:8px', dir: 'rtl' }, h('b', null, 'التصحيح: '), t('span', q.correction)));
+    if (q.modelAnswer) after.append(h('div', { class: 'kv' }, h('div', { class: 'k', dir: 'rtl' }, 'الإجابة النموذجية'), t('p', q.modelAnswer)));
+    if (q.analysis && q.analysis.length) {
+      if (q.type === 'mcq') after.append(h('div', { class: 'analysis' }, h('div', { dir: 'rtl', style: 'font-weight:700' }, 'تحليل الخيارات'), h('ul', { class: 'clean' }, q.analysis.map((a, j) => h('li', null, h('b', { dir: 'ltr' }, (LETTERS[j] || '') + (j === q.answer ? ' ✔' : '') + ' '), t('span', a))))));
+      else after.append(h('div', { class: 'analysis' }, h('div', { dir: 'rtl', style: 'font-weight:700' }, q.modelAnswer ? 'نقاط يجب أن تذكرها' : 'التحليل'), h('ul', { class: 'clean' }, q.analysis.map(a => t('li', a)))));
+    }
+    const g = goldenBox(q.golden, ctx); if (g) after.append(g);
+  };
+  if (o.reveal) fillAfter();
+  if (q.type === 'mcq') {
+    const opts = h('div', { class: 'opts' }, q.options.map((op, j) => {
+      const b = h('button', { class: 'opt' + (o.reveal && j === q.answer ? ' right' : ''), type: 'button', disabled: !!o.reveal, onclick() {
+        [...opts.children].forEach((x, k) => { x.disabled = true; if (k === q.answer) x.classList.add('right'); });
+        if (j !== q.answer) b.classList.add('wrong');
+        fillAfter(); after.hidden = false; o.onAnswered(j === q.answer);
+      } }, h('span', { class: 'k' }, LETTERS[j]), t('span', op));
+      return b;
+    }));
+    card.append(opts);
+  } else if (q.type === 'tf') {
+    const mk = (val, label) => h('button', { class: 'opt' + (o.reveal && val === q.answer ? ' right' : ''), type: 'button', disabled: !!o.reveal, onclick(e) {
+      [...row.children].forEach(x => { x.disabled = true; if (x.dataset.v === String(q.answer)) x.classList.add('right'); });
+      if (val !== q.answer) e.currentTarget.classList.add('wrong');
+      fillAfter(); after.hidden = false; o.onAnswered(val === q.answer);
+    }, 'data-v': String(val) }, label);
+    const row = h('div', { class: 'opts', style: 'flex-direction:row' }, mk(true, 'صح'), mk(false, 'خطأ'));
+    card.append(row);
+  } else {
+    if (!o.reveal) {
+      const ta = h('textarea', { class: 'input', rows: '4', dir: 'auto', 'aria-label': 'إجابتك', placeholder: 'اكتب إجابتك هنا (اختياري)' });
+      const self = h('div', { class: 'row', hidden: true, dir: 'rtl' }, h('span', { class: 'small' }, 'قارن إجابتك بالنموذجية:'),
+        h('button', { class: 'btn btn-soft btn-sm', type: 'button', onclick() { self.hidden = true; o.onAnswered(true); } }, 'أصبت'),
+        h('button', { class: 'btn btn-amber btn-sm', type: 'button', onclick() { self.hidden = true; o.onAnswered(false); } }, 'أخطأت'));
+      const reveal = h('button', { class: 'btn btn-ghost btn-sm', type: 'button', onclick() { reveal.hidden = true; fillAfter(); after.hidden = false; self.hidden = false; } }, 'أظهر الإجابة النموذجية');
+      card.append(ta, reveal, self);
+    }
+  }
+  card.append(after);
+  return card;
+}
+
+/* ---------- calculation problems (fresh numbers, computed answers) ---------- */
+function calcProblem(p, ctx, o) {
+  const inst = Calc.instance(p);
+  const box = h('div', { class: 'stack' });
+  if (!inst) { box.append(h('div', { class: 'err', dir: 'rtl' }, 'تعذّر توليد أرقام لهذه المسألة.')); o && o.onAnswered && o.onAnswered(false); return box; }
+  const d = p.decimals;
+  if (p.title) box.append(t('h3', p.title));
+  box.append(t('p', Calc.fill(p.template, inst.vars, d)));
+  const sol = h('div', { hidden: !(o && o.reveal) });
+  const fillSol = () => {
+    sol.textContent = '';
+    sol.append(h('div', { class: 'okbox', dir: 'rtl' }, h('b', null, 'الجواب: '), h('bdi', { dir: 'ltr' }, Calc.fmt(inst.answer, d) + (p.unit ? ' ' + p.unit : ''))));
+    if (p.steps.length) sol.append(h('div', { class: 'analysis' }, h('div', { dir: 'rtl', style: 'font-weight:700' }, 'خطوات الحل'), h('ol', { class: 'clean' }, p.steps.map(s => t('li', Calc.fill(s, inst.vars, d))))));
+    const g = goldenBox(p.golden, ctx); if (g) sol.append(g);
+  };
+  if (o && o.reveal) { fillSol(); box.append(sol); return box; }
+  const inp = h('input', { class: 'input', inputmode: 'decimal', autocomplete: 'off', 'aria-label': 'جوابك', placeholder: 'جوابك' });
+  const msg = h('div', { class: 'small', role: 'status', dir: 'rtl' });
+  const btn = h('button', { class: 'btn btn-primary btn-sm', type: 'button', onclick() {
+    const ok = Calc.check(inp.value, inst.answer, d);
+    if (ok === null) { msg.textContent = 'اكتب رقمًا.'; msg.className = 'small err'; return; }
+    inp.disabled = true; btn.disabled = true;
+    msg.textContent = ok ? 'إجابة صحيحة.' : 'إجابة غير صحيحة.'; msg.className = 'small ' + (ok ? 'okbox' : 'err');
+    fillSol(); sol.hidden = false; o && o.onAnswered && o.onAnswered(ok);
+  } }, 'تحقق');
+  box.append(h('div', { class: 'calc-in' }, inp, p.unit ? h('span', { class: 'ltr small muted', dir: 'ltr' }, p.unit) : null, btn), msg, sol);
+  return box;
+}
+function calcSetView(problems, ctx) {
+  const wrap = h('div', { class: 'stack' });
+  const results = problems.map(() => null); let reported = false;
+  problems.forEach((p, i) => {
+    const card = h('article', { class: 'card item' }, h('div', { class: 'itemhead' }, h('span', { class: 'chip' }, 'مسألة ' + (i + 1)), h('div', { class: 'row' }, pageBadge(p.page), ctx.flag ? ctx.flag('problems.' + i, p) : null)));
+    card.append(calcProblem(p, ctx, { reveal: ctx.reveal, onAnswered(ok) {
+      results[i] = ok;
+      if (!reported && results.every(r => r !== null)) {
+        reported = true; const score = results.filter(Boolean).length;
+        const wrongPoints = problems.filter((q, k) => results[k] === false).map(q => ({ section: q.section, page: q.page, text: (q.title || q.template).slice(0, 160) }));
+        ctx.onResult && ctx.onResult({ score, total: problems.length, wrongPoints });
+        wrap.append(h('div', { class: 'card', dir: 'rtl' }, h('div', { class: 'score' }, h('div', { class: 'ring', style: '--p:' + Math.round(score / problems.length * 100) }, h('span', { dir: 'ltr' }, score + '/' + problems.length)), h('p', { class: 'small muted' }, 'اضغط «أرقام جديدة» لتتدرب على المسائل نفسها بأرقام مختلفة.'))));
+      }
+    } }));
+    wrap.append(card);
+  });
+  return wrap;
+}
+
+/* ---------- spot the error ---------- */
+function spotView(sentences, ctx) {
+  const wrap = h('div', { class: 'stack' });
+  const total = sentences.filter(s => s.error).length;
+  wrap.append(h('p', { class: 'muted small', dir: 'rtl' }, ctx.reveal ? 'الجمل المظللة فيها أخطاء مزروعة، وتحت كل منها التصحيح.' : 'في هذا النص ' + total + ' أخطاء مزروعة. اضغط كل جملة تظنها خاطئة ثم اضغط «تحقق».'));
+  const btns = sentences.map((s, i) => {
+    const b = h('button', { class: 'sent', type: 'button', 'aria-pressed': 'false', onclick() { if (checked) return; const on = b.getAttribute('aria-pressed') !== 'true'; b.setAttribute('aria-pressed', String(on)); count(); } }, t('span', s.text));
+    return b;
+  });
+  let checked = false;
+  const status = h('div', { class: 'small muted', role: 'status', dir: 'rtl' });
+  const count = () => { status.textContent = 'اخترت ' + btns.filter(b => b.getAttribute('aria-pressed') === 'true').length + ' من ' + total; };
+  const list = h('div');
+  sentences.forEach((s, i) => list.append(h('div', { class: 'item' }, btns[i])));
+  const markAll = () => {
+    sentences.forEach((s, i) => {
+      const b = btns[i]; const sel = b.getAttribute('aria-pressed') === 'true';
+      b.disabled = true;
+      if (s.error) { b.classList.add(ctx.reveal || sel ? 'hit' : 'miss'); b.append(h('span', { class: 'fixline', dir: 'rtl' }, (ctx.reveal ? '' : (sel ? '✔ أصبت. ' : 'فاتك هذا الخطأ. ')) + 'الصحيح:', ' ', pageBadge(s.page)), h('span', { class: 'fixline', dir: 'auto' }, s.correct)); }
+      else if (sel) { b.classList.add('false'); b.append(h('span', { class: 'fixline', style: 'color:var(--red)', dir: 'rtl' }, 'هذه الجملة صحيحة.')); }
+      if (s.error && ctx.flag) b.after(h('div', { class: 'row', style: 'justify-content:flex-end;margin-top:-6px' }, ctx.flag('sentences.' + i, s)));
+    });
+  };
+  if (ctx.reveal) { markAll(); wrap.append(list); return wrap; }
+  const check = h('button', { class: 'btn btn-primary btn-block', type: 'button', onclick() {
+    checked = true; check.hidden = true; markAll();
+    const hits = sentences.filter((s, i) => s.error && btns[i].getAttribute('aria-pressed') === 'true').length;
+    const missed = sentences.filter((s, i) => s.error && btns[i].getAttribute('aria-pressed') !== 'true');
+    const falseAlarms = sentences.filter((s, i) => !s.error && btns[i].getAttribute('aria-pressed') === 'true').length;
+    status.textContent = 'اصطدت ' + hits + ' من ' + total + (falseAlarms ? '. جمل صحيحة حسبتها خاطئة: ' + falseAlarms + '.' : '.');
+    ctx.onResult && ctx.onResult({ score: hits, total, wrongPoints: missed.map(s => ({ section: s.section, page: s.page, text: s.correct.slice(0, 160) })) });
+  } }, 'تحقق');
+  count();
+  wrap.append(status, list, check);
+  return wrap;
+}
+
+/* ---------- teach-back feedback ---------- */
+function teachFeedback(f, ctx) {
+  const pct = f.score * 10;
+  return h('div', { class: 'stack' },
+    h('div', { class: 'card' }, h('div', { class: 'score' }, h('div', { class: 'ring', style: '--p:' + pct }, h('span', { dir: 'ltr' }, f.score + '/10')), h('div', null, h('h3', { dir: 'auto' }, L(ctx, 'Your explanation', 'شرحك')), f.summary ? t('p', f.summary, 'small') : null))),
+    f.correct.length ? h('div', { class: 'card flat' }, h('div', { class: 'kv' }, h('div', { class: 'k', dir: 'auto', style: 'color:var(--green)' }, L(ctx, 'What you got right', 'ما أصبت فيه')), h('ul', { class: 'clean' }, f.correct.map(x => t('li', x))))) : null,
+    f.missing.length ? h('div', { class: 'card flat' }, h('div', { class: 'kv' }, h('div', { class: 'k', dir: 'auto', style: 'color:var(--amber)' }, L(ctx, 'Important points you missed', 'نقاط مهمة فاتتك')), h('ul', { class: 'clean' }, f.missing.map(x => t('li', x))))) : null,
+    f.wrong.length ? h('div', { class: 'card flat' }, h('div', { class: 'kv' }, h('div', { class: 'k', dir: 'auto', style: 'color:var(--red)' }, L(ctx, 'Corrections', 'تصحيحات')),
+      f.wrong.map((w, i) => h('div', { class: 'item' }, w.said ? t('p', '✗ ' + w.said, 'small muted') : null, h('div', { class: 'spread' }, t('p', '✓ ' + w.fix), h('div', { class: 'row' }, pageBadge(w.page), ctx.flag ? ctx.flag('wrong.' + i, w) : null)))))) : null);
+}
+
+/* ============================== STATE & ACCESS ============================== */
+const S = { user: null, profile: null, aiKey: null, settings: { priceIQD: null }, isAdmin: false, lectures: null, outputs: {}, authReady: false, route: null };
+function subState() { const p = S.profile || {}; if ((p.subscriptionUntil || 0) > Date.now()) return 'active'; if (!p.trialUsed) return 'trial'; return 'ended'; }
+function canUseTrialHere() { const f = LS.get('lecture.trialDevice'); return !f || f === S.user.uid; }
+function canUpload() { const s = subState(); return s === 'active' || (s === 'trial' && canUseTrialHere()); }
+function isTrialLecture(l) { return !!(l && l.isTrial && S.profile && S.profile.trialLectureId === l.id); }
+function canGenerate(lecture, existing) { return subState() === 'active' || (isTrialLecture(lecture) && existing === 0); }
+function canTranslate(lecture, out) { return subState() === 'active' || (isTrialLecture(lecture) && !out.translationJson); }
+
+const Auth = {
+  mode: 'local', fb: null, auth: null, cb: null,
+  setupLocal() { this.mode = 'local'; },
+  setupFirebase(authM, app) { this.mode = 'firebase'; this.fb = authM; this.auth = authM.getAuth(app); },
+  start(cb) {
+    this.cb = cb;
+    if (this.mode === 'firebase') {
+      this.fb.onAuthStateChanged(this.auth, u => cb(u ? { uid: u.uid, displayName: u.displayName || '', email: u.email || '' } : null));
+      this.fb.getRedirectResult(this.auth).catch(e => toast(authErr(e), true));
+    } else cb(LS.get('lecture.localUser'));
+  },
+  async signIn(name) {
+    if (this.mode === 'firebase') {
+      needOnline();
+      const p = new this.fb.GoogleAuthProvider(); p.setCustomParameters({ prompt: 'select_account' });
+      try { await this.fb.signInWithPopup(this.auth, p); }
+      catch (e) {
+        const c = (e && e.code) || '';
+        if (c === 'auth/popup-blocked' || c === 'auth/operation-not-supported-in-this-environment') return this.fb.signInWithRedirect(this.auth, p);
+        if (c === 'auth/popup-closed-by-user' || c === 'auth/cancelled-popup-request') return;
+        throw new AppError(authErr(e));
+      }
+    } else { const u = { uid: 'local-user', displayName: name, email: '' }; LS.set('lecture.localUser', u); this.cb(u); }
+  },
+  async signOut() { if (this.mode === 'firebase') await this.fb.signOut(this.auth); else { LS.del('lecture.localUser'); this.cb(null); } }
+};
+function authErr(e) {
+  const c = (e && e.code) || '';
+  if (c.includes('network')) return 'تعذّر الاتصال. تحقق من الإنترنت وأعد المحاولة.';
+  if (c.includes('unauthorized-domain')) return 'نطاق الموقع غير مضاف في إعدادات الدخول. راجع خطوات النشر.';
+  return 'تعذّر تسجيل الدخول. أعد المحاولة.';
+}
+
+/* ============================== LAYOUT ============================== */
+const isIOS = () => /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+const isStandalone = () => (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
+function renderBanners() {
+  const b = $('#banners'); b.textContent = '';
+  if (Store.kind === 'local') b.append(h('div', { class: 'banner demo' }, 'وضع تجريبي — البيانات محفوظة على هذا الجهاز فقط'));
+  if (!online()) b.append(h('div', { class: 'banner off', role: 'status' }, 'أنت غير متصل — تعرض آخر البيانات المحفوظة'));
+  if (isIOS() && !isStandalone() && !LS.get('lecture.iosHintClosed')) {
+    b.append(h('div', { class: 'banner ios' }, icon('info', 20), h('span', { style: 'flex:1' }, 'على آيفون: اضغط زر المشاركة ثم «إضافة إلى الشاشة الرئيسية» ليعمل ليكچر كتطبيق ويحتفظ بملفاتك.'),
+      h('button', { class: 'iconbtn', type: 'button', 'aria-label': 'إخفاء', onclick() { LS.set('lecture.iosHintClosed', true); renderBanners(); } }, '✕')));
+  }
+}
+function setNav(current) {
+  const nav = $('#nav'); document.body.classList.toggle('nonav', !current);
+  if (!current) { nav.hidden = true; return; }
+  nav.hidden = false; nav.textContent = '';
+  const items = [['home', 'محاضراتي', 'home'], ['plan', 'خطة النجاة', 'plan'], ['weak', 'نقاط ضعفي', 'target'], ['account', 'حسابي', 'user']];
+  nav.append(h('div', { class: 'nav-in' }, items.map(([r, label, ic]) => h('a', { href: '#/' + r, 'aria-current': r === current ? 'page' : null }, h('span', { class: 'navpill' }, icon(ic, 22)), label))));
+}
+function frame(o) {
+  const tb = $('#topbar'); tb.hidden = !!o.hideTop; tb.textContent = '';
+  if (o.back) tb.append(h('button', { class: 'iconbtn', type: 'button', 'aria-label': 'رجوع', onclick() { go(o.back); } }, icon('back', 24)));
+  else tb.append(h('span', { style: 'display:inline-grid;place-items:center;width:44px;height:44px;flex:none' }, logo(30)));
+  tb.append(h('h1', { dir: 'auto' }, o.title || 'ليكچر'));
+  setNav(o.nav || null);
+  const v = $('#view'); v.textContent = ''; window.scrollTo(0, 0);
+  return v;
+}
+function go(path) { const target = '#/' + path; if (location.hash === target) route(); else location.hash = target; }
+const loadingState = (msg) => h('div', { class: 'state', role: 'status' }, h('div', { class: 'spinner' }), h('p', { class: 'muted' }, msg || 'جارٍ التحميل…'));
+function errorState(e, retry) {
+  if (!(e instanceof AppError)) console.error(e);
+  const msg = e instanceof AppError ? e.message : 'حدث خطأ غير متوقع. أعد المحاولة.';
+  return h('div', { class: 'state error', role: 'alert' }, h('div', { class: 'ico' }, icon('info', 30)), h('p', null, msg),
+    e && e.action === 'activate' ? h('button', { class: 'btn btn-primary', type: 'button', onclick: () => go('activate') }, 'أعد التفعيل') : null,
+    retry ? h('button', { class: 'btn btn-ghost', type: 'button', onclick: retry }, icon('refresh', 20), 'أعد المحاولة') : null);
+}
+const emptyState = (ic, title, text, action) => h('div', { class: 'state' }, h('div', { class: 'ico' }, icon(ic, 30)), h('h3', null, title), text ? h('p', { class: 'muted' }, text) : null, action || null);
+function skeleton(n = 3) { return h('div', { class: 'stack', 'aria-hidden': 'true' }, Array.from({ length: n }, () => h('div', { class: 'skel' }))); }
+function whatsappLink(text) { return 'https://wa.me/' + WHATSAPP_INTL + '?text=' + encodeURIComponent(text); }
+function subscribeText() { return 'مرحبًا، أريد الاشتراك الشهري في تطبيق ليكچر.\nالاسم: ' + ((S.profile && S.profile.displayName) || '') + '\nالبريد: ' + ((S.profile && S.profile.email) || ''); }
+function lockedState(text) {
+  return h('div', { class: 'state' }, h('div', { class: 'ico' }, icon('lock', 30)), h('h3', null, 'هذه الميزة للمشتركين'), h('p', { class: 'muted' }, text || 'استعملت تجربتك المجانية. اشترك لتتابع بلا حدود.'),
+    h('a', { class: 'btn btn-primary', href: whatsappLink(subscribeText()), target: '_blank', rel: 'noopener' }, icon('whatsapp', 20), 'اشترك عبر واتساب'),
+    h('button', { class: 'btn btn-ghost', type: 'button', onclick: () => go('account') }, 'عندي كود تفعيل'));
+}
+
+/* ============================== DATA ============================== */
+function hydrateLecture(l) { try { l.digest = l.digestJson ? JSON.parse(l.digestJson) : null; } catch (e) { l.digest = null; } return l; }
+async function getLectures(force) {
+  if (S.lectures && !force) return S.lectures;
+  const list = await Store.list('lectures', [['ownerUid', '==', S.user.uid]]);
+  list.forEach(hydrateLecture); list.sort((a, b) => b.createdAt - a.createdAt);
+  S.lectures = list; return list;
+}
+async function getLecture(id) {
+  const c = (S.lectures || []).find(l => l.id === id); if (c) return c;
+  const l = await Store.get('lectures', id); if (!l || l.ownerUid !== S.user.uid) throw new AppError('لم أجد هذه المحاضرة.');
+  return hydrateLecture(l);
+}
+function patchLecture(id, data) { const l = (S.lectures || []).find(x => x.id === id); if (l) { Object.assign(l, data); hydrateLecture(l); } }
+async function getOutputs(lectureId, force) {
+  if (S.outputs[lectureId] && !force) return S.outputs[lectureId];
+  const list = await Store.list('outputs', [['ownerUid', '==', S.user.uid], ['lectureId', '==', lectureId]]);
+  list.forEach(o => { try { o.content = JSON.parse(o.contentJson); } catch (e) { o.content = null; } });
+  S.outputs[lectureId] = list.filter(o => o.content); return S.outputs[lectureId];
+}
+async function getAttempts() { return Store.list('attempts', [['ownerUid', '==', S.user.uid]]); }
+async function loadSettings() {
+  const cached = LS.get('lecture.settings'); if (cached) S.settings = cached;
+  try { const s = await Store.get('settings', 'app'); if (s) { S.settings = { priceIQD: s.priceIQD || null }; LS.set('lecture.settings', S.settings); } } catch (e) { /* keep cached settings */ }
+}
+
+/* ============================== ROUTER ============================== */
+function parseHash() { const parts = location.hash.replace(/^#\/?/, '').split('/').filter(Boolean).map(decodeURIComponent); return { name: parts[0] || 'home', args: parts.slice(1) }; }
+window.addEventListener('hashchange', route);
+async function route() {
+  const r = parseHash(); S.route = r;
+  if (!S.authReady) return;
+  if (!S.user) return screenWelcome();
+  if (!S.profile) return;
+  if (!S.profile.track) return screenProfile(true);
+  if (!S.aiKey && !['account', 'activate', 'admin', 'profile'].includes(r.name)) return screenActivate(true);
+  const map = { home: screenHome, upload: screenUpload, lecture: screenLecture, out: screenOutput, plan: screenPlan, weak: screenWeak, account: screenAccount, activate: () => screenActivate(false), profile: () => screenProfile(false), admin: screenAdmin };
+  try { await (map[r.name] || screenHome)(...r.args); }
+  catch (e) { const v = $('#view'); v.textContent = ''; v.append(errorState(e, route)); }
+}
+async function handleUser(u) {
+  S.user = u; S.profile = null; S.aiKey = null; S.lectures = null; S.outputs = {}; S.isAdmin = false;
+  if (!u) return route();
+  S.isAdmin = Store.kind === 'local' || ADMIN_UIDS.includes(u.uid);
+  const v = frame({ title: 'ليكچر' }); v.append(loadingState('جارٍ تحميل حسابك…'));
+  try {
+    let p = await Store.get('users', u.uid);
+    if (!p) {
+      p = { displayName: u.displayName || '', email: u.email || '', track: '', stage: 0, country: '', subscriptionUntil: 0, trialUsed: false, trialLectureId: '', lastCode: '', createdAt: Date.now() };
+      saved(await Store.set('users', u.uid, p)); p.id = u.uid;
+    }
+    S.profile = p; LS.set('lecture.profile.' + u.uid, p);
+  } catch (e) {
+    const cached = LS.get('lecture.profile.' + u.uid);
+    if (cached) S.profile = cached; else { v.textContent = ''; v.append(errorState(e, () => handleUser(u))); return; }
+  }
+  S.aiKey = LS.get('lecture.k.' + u.uid);
+  if (!S.aiKey) { try { const sec = await Store.get('secrets', u.uid); if (sec && sec.k) { S.aiKey = sec.k; LS.set('lecture.k.' + u.uid, sec.k); } } catch (e) { /* offline: ask again later */ } }
+  loadSettings();
+  route();
+}
+function setProfile(data) { Object.assign(S.profile, data); LS.set('lecture.profile.' + S.user.uid, S.profile); }
+
+/* ============================== SCREEN 1: WELCOME, PROFILE, ACTIVATION ============================== */
+function screenWelcome() {
+  const v = frame({ hideTop: true });
+  const err = h('div', { role: 'alert' });
+  v.append(h('div', { class: 'hero' }, logo(112, 'شعار ليكچر'), h('div', { class: 'wordmark' }, 'ليكچر'), h('div', { class: 'wordmark-en' }, APP.nameEn),
+    h('p', { class: 'muted' }, 'ارفع محاضرتك، وذاكرها بطرق صيدلانية مدروسة بضغطة واحدة.')));
+  v.append(h('div', { class: 'note', style: 'display:flex;gap:8px;align-items:flex-start' }, icon('info', 20), h('span', null, 'المحتوى يُولَّد بالذكاء الاصطناعي وقد يخطئ، لذلك تجد رقم الصفحة بجانب كل معلومة لترجع إلى محاضرتك.')));
+  const box = h('div', { class: 'stack', style: 'margin-top:24px' });
+  if (Auth.mode === 'firebase') {
+    const b = h('button', { class: 'btn btn-primary btn-big btn-block', type: 'button', async onclick() { err.textContent = ''; b.disabled = true; try { await Auth.signIn(); } catch (e) { err.append(errorState(e)); } finally { b.disabled = false; } } }, icon('user', 22), 'الدخول بحساب ', bdi('Google'));
+    box.append(b);
+  } else {
+    const name = h('input', { class: 'input', id: 'nm', autocomplete: 'name', placeholder: 'اسمك' });
+    box.append(h('div', { class: 'field' }, h('label', { for: 'nm' }, 'اسمك'), name),
+      h('button', { class: 'btn btn-primary btn-big btn-block', type: 'button', onclick() { const n = name.value.trim(); if (n.length < 2) { err.textContent = ''; err.append(h('div', { class: 'err' }, 'اكتب اسمك أولًا.')); return; } Auth.signIn(n); } }, 'ابدأ على هذا الجهاز'));
+  }
+  v.append(box, err);
+}
+function screenProfile(first) {
+  const v = frame({ title: first ? 'أهلًا بك' : 'بياناتي', back: first ? null : 'account' });
+  const p = S.profile;
+  const stageSel = h('select', { class: 'input', id: 'st' });
+  const fillStages = (track) => { const n = track === 'institute' ? 2 : 5; const cur = Number(stageSel.value || p.stage || 1); stageSel.textContent = ''; ['الأولى', 'الثانية', 'الثالثة', 'الرابعة', 'الخامسة'].slice(0, n).forEach((s, i) => stageSel.append(h('option', { value: String(i + 1), selected: cur === i + 1 }, 'المرحلة ' + s))); };
+  const trackName = 'trk';
+  const radios = [['college', 'كلية الصيدلة'], ['institute', 'معهد صحي (صيدلة)']].map(([val, label]) => h('label', null, h('input', { type: 'radio', name: trackName, value: val, checked: (p.track || 'college') === val, onchange: () => fillStages(val) }), label));
+  fillStages(p.track || 'college');
+  const country = h('select', { class: 'input', id: 'ct' }, COUNTRIES.map(c => h('option', { value: c, selected: (p.country || 'العراق') === c }, c)));
+  const err = h('div', { role: 'alert' });
+  v.append(h('p', { class: 'muted' }, first ? 'ثلاث معلومات قصيرة، مرة واحدة فقط.' : 'عدّل بياناتك الدراسية.'),
+    h('div', { class: 'stack' },
+      h('fieldset', { style: 'border:0;padding:0;margin:0' }, h('legend', { class: 'small', style: 'font-weight:500;margin-bottom:6px' }, 'أين تدرس؟'), h('div', { class: 'choice' }, radios)),
+      h('div', { class: 'field' }, h('label', { for: 'st' }, 'المرحلة'), stageSel),
+      h('div', { class: 'field' }, h('label', { for: 'ct' }, 'البلد'), country),
+      err,
+      h('button', { class: 'btn btn-primary btn-block', type: 'button', async onclick(e) {
+        const btn = e.currentTarget; btn.disabled = true; err.textContent = '';
+        const track = (v.querySelector('input[name="trk"]:checked') || {}).value || 'college';
+        const data = { track, stage: Number(stageSel.value) || 1, country: country.value };
+        try { saved(await Store.set('users', S.user.uid, data, { merge: true })); setProfile(data); go(first ? 'home' : 'account'); }
+        catch (x) { err.append(errorState(x)); btn.disabled = false; }
+      } }, first ? 'متابعة' : 'حفظ')));
+}
+const ACT_ILLUSTRATION = '<svg viewBox="0 0 320 196" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="صفحة التفعيل والزر المطلوب في أعلاها"><rect x="6" y="6" width="308" height="184" rx="12" fill="#fff" stroke="#CFC3A6" stroke-width="2"/><rect x="6" y="6" width="308" height="26" rx="12" fill="#F1EDE3"/><rect x="6" y="20" width="308" height="12" fill="#F1EDE3"/><circle cx="22" cy="19" r="4" fill="#CFC3A6"/><circle cx="35" cy="19" r="4" fill="#CFC3A6"/><circle cx="48" cy="19" r="4" fill="#CFC3A6"/><rect x="18" y="46" width="60" height="132" rx="8" fill="#F7F4EC"/><rect x="26" y="58" width="44" height="6" rx="3" fill="#DCD3BF"/><rect x="26" y="74" width="36" height="6" rx="3" fill="#DCD3BF"/><rect x="26" y="90" width="40" height="6" rx="3" fill="#DCD3BF"/><rect x="92" y="50" width="80" height="8" rx="4" fill="#DCD3BF"/><rect x="92" y="96" width="206" height="14" rx="4" fill="#F1EDE3"/><rect x="92" y="118" width="206" height="14" rx="4" fill="#F1EDE3"/><rect x="92" y="140" width="150" height="14" rx="4" fill="#F1EDE3"/><rect x="196" y="44" width="104" height="26" rx="13" fill="#1A73E8"/><text x="248" y="61" text-anchor="middle" font-family="Arial,sans-serif" font-size="11" font-weight="700" fill="#fff">Create API key</text><ellipse cx="248" cy="57" rx="66" ry="22" fill="none" stroke="#E0A100" stroke-width="3.5" stroke-dasharray="7 5"/><path d="M226 104 L238 82" stroke="#E0A100" stroke-width="3.5" stroke-linecap="round"/><path d="M231 82 L239 80 L240 88" fill="none" stroke="#E0A100" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+function screenActivate(first) {
+  const v = frame({ title: 'تفعيل حسابك', back: first ? null : 'account', nav: first ? null : 'account' });
+  const ill = h('div'); ill.innerHTML = ACT_ILLUSTRATION; // constant markup
+  ill.firstChild.setAttribute('class', 'illus');
+  const inp = h('input', { class: 'input ltr', id: 'actcode', dir: 'ltr', autocomplete: 'off', autocapitalize: 'off', spellcheck: 'false', placeholder: 'الصق الرمز هنا' });
+  const msg = h('div', { role: 'status' });
+  const doneBox = h('div');
+  const activate = h('button', { class: 'btn btn-primary', type: 'button', async onclick() {
+    msg.textContent = ''; const code = inp.value.trim().replace(/\s+/g, '');
+    if (code.length < 20) { msg.append(h('div', { class: 'err' }, 'الرمز غير مكتمل. انسخه كاملًا ثم الصقه.')); return; }
+    activate.disabled = true; msg.append(loadingState('جارٍ التحقق…'));
+    try {
+      const ok = await AIX.validateKey(code); msg.textContent = '';
+      if (!ok) { msg.append(h('div', { class: 'err' }, 'الرمز غير صحيح. تأكد أنك نسخته كاملًا من صفحة التفعيل.')); return; }
+      S.aiKey = code; LS.set('lecture.k.' + S.user.uid, code);
+      try { saved(await Store.set('secrets', S.user.uid, { k: code, updatedAt: Date.now() })); } catch (e) { /* kept on this device */ }
+      doneBox.textContent = '';
+      doneBox.append(h('div', { class: 'state' }, h('div', { class: 'ico', style: 'background:var(--green-50);color:var(--green)' }, icon('check', 34)), h('h3', null, 'تم تفعيل حسابك'),
+        h('button', { class: 'btn btn-primary', type: 'button', onclick: () => go('home') }, 'ابدأ')));
+      doneBox.scrollIntoView({ behavior: 'smooth' });
+    } catch (e) { msg.textContent = ''; msg.append(errorState(e)); }
+    finally { activate.disabled = false; }
+  } }, icon('check', 20), 'تفعيل');
+  const paste = h('button', { class: 'btn btn-soft', type: 'button', async onclick() {
+    try { const s = await navigator.clipboard.readText(); if (s) { inp.value = s.trim(); return; } } catch (e) { /* clipboard blocked */ }
+    inp.focus(); toast('اضغط مطولًا داخل الخانة ثم اختر «لصق».');
+  } }, icon('clip', 20), 'الصق');
+  v.append(h('p', { class: 'muted' }, first ? 'خطوة أخيرة قبل أن تبدأ. تأخذ أقل من دقيقة، ومرة واحدة فقط.' : 'أعد التفعيل إن طُلب منك ذلك أو غيّرت حسابك.'),
+    h('ol', { class: 'steps-list' },
+      h('li', null, h('h3', null, 'افتح صفحة التفعيل'), h('p', { class: 'small muted' }, 'ادخل بحساب ', bdi('Google'), ' نفسه إن طُلب منك.'),
+        h('a', { class: 'btn btn-primary', href: AI.keyPage, target: '_blank', rel: 'noopener' }, 'افتح صفحة التفعيل')),
+      h('li', null, h('h3', null, 'اضغط الزر المحاط بالدائرة'), ill, h('p', { class: 'small muted', style: 'margin-top:8px' }, 'ثم انسخ الرمز الذي يظهر. وإن وجدت رمزًا جاهزًا في القائمة فانسخه.')),
+      h('li', null, h('h3', null, 'الصق الرمز هنا'), h('div', { class: 'stack' }, h('label', { class: 'sr', for: 'actcode' }, 'الرمز'), inp, h('div', { class: 'row' }, paste, activate), msg))),
+    doneBox,
+    h('p', { class: 'small muted' }, 'تحتاج مساعدة؟ ', h('a', { href: whatsappLink('أحتاج مساعدة في تفعيل حسابي في تطبيق ليكچر.'), target: '_blank', rel: 'noopener' }, 'راسلنا على واتساب')));
+}
+
+/* ============================== SCREEN 2: MY LECTURES ============================== */
+function statusCard() {
+  const s = subState(); const p = S.profile;
+  let pill, text, cta = null;
+  if (s === 'active') { pill = h('span', { class: 'status-pill chip green' }, icon('check', 16), 'مشترك'); text = 'اشتراكك فعّال حتى ' + fmtDate(p.subscriptionUntil) + '.'; }
+  else if (s === 'trial') { pill = h('span', { class: 'status-pill chip amber' }, 'تجربة مجانية'); text = canUseTrialHere() ? 'لديك تجربة مجانية: محاضرة واحدة من محاضراتك، وكل طريقة مرة واحدة.' : 'استُعملت التجربة المجانية على هذا الجهاز من حساب آخر.'; if (!canUseTrialHere()) cta = h('a', { class: 'btn btn-primary btn-sm', href: whatsappLink(subscribeText()), target: '_blank', rel: 'noopener' }, 'اشترك'); }
+  else { pill = h('span', { class: 'status-pill chip red' }, p.subscriptionUntil ? 'انتهى الاشتراك' : 'انتهت التجربة'); text = 'تستطيع فتح كل ما أنشأته سابقًا. اشترك لترفع محاضرات جديدة.'; cta = h('a', { class: 'btn btn-primary btn-sm', href: whatsappLink(subscribeText()), target: '_blank', rel: 'noopener' }, icon('whatsapp', 18), 'اشترك'); }
+  const first = (p.displayName || '').split(/\s+/)[0];
+  return h('div', { class: 'card stack' }, h('div', { class: 'spread' }, h('h3', { style: 'margin:0' }, 'أهلًا ', first || ''), pill), h('p', { class: 'small muted', style: 'margin:0' }, text), cta);
+}
+async function screenHome() {
+  const v = frame({ title: 'محاضراتي', nav: 'home' });
+  v.append(statusCard());
+  const up = h('button', { class: 'btn btn-primary btn-big btn-block', type: 'button', style: 'margin-top:16px', onclick() { if (canUpload()) go('upload'); else go('account'); } }, icon('upload', 24), 'ارفع محاضرة');
+  v.append(up, h('div', { class: 'modes', style: 'margin-top:12px' },
+    h('button', { class: 'btn btn-soft', type: 'button', onclick: () => go('plan') }, icon('plan', 20), 'خطة النجاة'),
+    h('button', { class: 'btn btn-soft', type: 'button', onclick: () => go('weak') }, icon('target', 20), 'نقاط ضعفي')));
+  v.append(h('h2', null, 'محاضراتك'));
+  const list = h('div', { class: 'stack' }); v.append(list);
+  const load = async (force) => {
+    list.textContent = ''; list.append(skeleton(3));
+    try {
+      const ls = await getLectures(force); list.textContent = '';
+      if (!ls.length) { list.append(emptyState('file', 'لا توجد محاضرات بعد', 'ارفع ملف PDF لمحاضرتك، وستظهر هنا مع كل ما تنشئه منها.', canUpload() ? h('button', { class: 'btn btn-primary', type: 'button', onclick: () => go('upload') }, icon('upload', 20), 'ارفع محاضرتك الأولى') : null)); return; }
+      for (const l of ls) {
+        const chip = l.status === 'processing' ? h('span', { class: 'chip amber' }, 'لم يكتمل التحليل') : l.status === 'error' ? h('span', { class: 'chip red' }, 'تعذّر التحليل') : (isTrialLecture(l) && subState() !== 'active' ? h('span', { class: 'chip amber' }, 'محاضرة التجربة') : null);
+        list.append(h('a', { class: 'card lect', href: '#/lecture/' + encodeURIComponent(l.id) },
+          h('div', { class: 'thumb', 'aria-hidden': 'true' }, icon('file', 26)),
+          h('div', { class: 'meta' }, t('h3', l.title || l.fileName), h('div', { class: 'row small muted' }, l.subject ? t('span', l.subject) : null, l.pageCount ? h('span', null, P_PAGES(l.pageCount)) : null, h('span', null, fmtDate(l.createdAt))), chip)));
+      }
+    } catch (e) { list.textContent = ''; list.append(errorState(e, () => load(true))); }
+  };
+  load(false);
+}
+
+/* ============================== SCREEN 3: UPLOAD ============================== */
+function loadPdfJs() {
+  if (window.pdfjsLib) return Promise.resolve(window.pdfjsLib);
+  return withTimeout(new Promise((res, rej) => {
+    const s = document.createElement('script'); s.src = PDFJS + 'pdf.min.js'; s.async = true;
+    s.onload = () => { if (window.pdfjsLib) { window.pdfjsLib.GlobalWorkerOptions.workerSrc = PDFJS + 'pdf.worker.min.js'; res(window.pdfjsLib); } else rej(new Error('pdfjs')); };
+    s.onerror = () => rej(new Error('pdfjs')); document.head.appendChild(s);
+  }), 25000);
+}
+async function inspectPdf(file) {
+  if (!/\.pdf$/i.test(file.name) && file.type !== 'application/pdf') throw new AppError('اختر ملفًا بصيغة PDF فقط.');
+  if (file.size > LIMITS.maxMB * 1048576) throw new AppError('حجم الملف أكبر من ' + LIMITS.maxMB + ' ميغابايت. اختر ملفًا أصغر أو قسّم المحاضرة.');
+  const buf = await file.arrayBuffer();
+  if (String.fromCharCode(...new Uint8Array(buf.slice(0, 5))) !== '%PDF-') throw new AppError('هذا الملف ليس PDF صالحًا.');
+  const hash = await sha256Hex(buf);
+  const r = { hash, pages: 0, pageTexts: [], scanned: false, textOk: false };
+  try {
+    const lib = await loadPdfJs();
+    const doc = await lib.getDocument({ data: new Uint8Array(buf.slice(0)) }).promise;
+    r.pages = doc.numPages;
+    if (r.pages > LIMITS.maxPages) throw new AppError('المحاضرة أطول من ' + LIMITS.maxPages + ' صفحة. قسّمها إلى أجزاء أصغر.');
+    for (let i = 1; i <= r.pages; i++) { const pg = await doc.getPage(i); const tc = await pg.getTextContent(); r.pageTexts.push(tc.items.map(x => x.str).join(' ').replace(/\s+/g, ' ').trim()); }
+    r.scanned = r.pageTexts.join('').length / Math.max(1, r.pages) < LIMITS.scannedChars; r.textOk = true;
+    if (doc.destroy) doc.destroy();
+  } catch (e) {
+    if (e instanceof AppError) throw e;
+    if (e && e.name === 'PasswordException') throw new AppError('الملف محمي بكلمة مرور. احفظه دون حماية ثم أعد المحاولة.');
+    r.textOk = false;
+  }
+  return r;
+}
+async function runDigest(lecture, blob, pageTexts) {
+  try {
+    const texts = pageTexts && pageTexts.length ? pageTexts : Array.from({ length: lecture.pageCount || 0 }, () => '');
+    const digest = await aiDigest(blob, texts);
+    const upd = { status: 'ready', digestJson: JSON.stringify(digest), title: lecture.title || digest.title || lecture.fileName, subject: lecture.subject || digest.subject || '', errorMsg: '' };
+    saved(await Store.set('lectures', lecture.id, upd, { merge: true })); Object.assign(lecture, upd); hydrateLecture(lecture); patchLecture(lecture.id, upd);
+    if (lecture.isTrial && subState() === 'trial') {
+      saved(await Store.batch([
+        { op: 'set', col: 'trialFiles', id: lecture.fileHash, data: { uid: S.user.uid, createdAt: Date.now() } },
+        { op: 'set', col: 'users', id: S.user.uid, data: { trialUsed: true, trialLectureId: lecture.id }, merge: true }]));
+      setProfile({ trialUsed: true, trialLectureId: lecture.id }); LS.set('lecture.trialDevice', S.user.uid);
+    }
+    return lecture;
+  } catch (e) {
+    const msg = e instanceof AppError ? e.message : 'تعذّر تحليل المحاضرة.';
+    try { await Store.set('lectures', lecture.id, { status: 'error', errorMsg: msg }, { merge: true }); patchLecture(lecture.id, { status: 'error', errorMsg: msg }); } catch (x) { /* status update is best effort */ }
+    throw e;
+  }
+}
+async function screenUpload() {
+  const v = frame({ title: 'رفع محاضرة', back: 'home' });
+  if (!canUpload()) { v.append(lockedState(subState() === 'trial' ? 'استُعملت التجربة المجانية على هذا الجهاز من حساب آخر.' : null)); return; }
+  if (subState() === 'trial') v.append(h('div', { class: 'note' }, 'هذه محاضرة تجربتك المجانية: اختر محاضرة حقيقية من محاضراتك. تستطيع تجربة كل طريقة عليها مرة واحدة.'));
+  const area = h('div', { class: 'stack', style: 'margin-top:12px' }); v.append(area);
+  const fileIn = h('input', { type: 'file', accept: '.pdf,application/pdf', id: 'pdf', class: 'sr' });
+  const pick = () => {
+    area.textContent = '';
+    area.append(h('label', { class: 'dropzone', for: 'pdf' }, h('div', { class: 'state', style: 'padding:0' }, h('div', { class: 'ico' }, icon('upload', 30))), h('b', null, 'اختر ملف المحاضرة'),
+      h('span', { class: 'small muted' }, 'PDF فقط، حتى ' + LIMITS.maxMB + ' ميغابايت و' + LIMITS.maxPages + ' صفحة.'), h('span', { class: 'btn btn-primary btn-sm' }, 'اختيار ملف')), fileIn);
+  };
+  fileIn.addEventListener('change', async () => {
+    const file = fileIn.files && fileIn.files[0]; if (!file) return;
+    area.textContent = ''; area.append(loadingState('جارٍ فحص الملف…'));
+    let pre;
+    try { pre = await inspectPdf(file); } catch (e) { area.textContent = ''; area.append(errorState(e, () => { fileIn.value = ''; pick(); })); return; }
+    area.textContent = '';
+    const title = h('input', { class: 'input', id: 'lt', dir: 'auto', value: file.name.replace(/\.pdf$/i, '').replace(/[_-]+/g, ' ').trim() });
+    const subject = h('input', { class: 'input', id: 'ls', dir: 'auto', placeholder: 'مثال: علم الأدوية' });
+    const err = h('div', { role: 'alert' });
+    area.append(h('div', { class: 'card stack' },
+      h('div', { class: 'row' }, h('div', { class: 'thumb', style: 'width:44px;height:52px;border-radius:12px;background:var(--primary);color:var(--on-primary);display:grid;place-items:center' }, icon('file', 24)),
+        h('div', { style: 'flex:1;min-width:0' }, t('b', file.name), h('div', { class: 'small muted' }, (file.size < 1048576 ? Math.max(1, Math.round(file.size / 1024)) + ' كيلوبايت' : (file.size / 1048576).toFixed(1) + ' ميغابايت'), pre.pages ? ' • ' + P_PAGES(pre.pages) : ''))),
+      pre.scanned ? h('div', { class: 'note' }, 'يبدو أن الملف مصوّر (صور لا نص). سيُقرأ، لكن الدقة قد تقل وأرقام الصفحات تحتاج تحققًا منك.') : null,
+      !pre.textOk ? h('div', { class: 'note' }, 'تعذّر فحص صفحات الملف على جهازك. سيُرسل كما هو للتحليل.') : null,
+      h('div', { class: 'field' }, h('label', { for: 'lt' }, 'عنوان المحاضرة'), title),
+      h('div', { class: 'field' }, h('label', { for: 'ls' }, 'المادة (اختياري)'), subject),
+      err,
+      h('button', { class: 'btn btn-primary btn-block', type: 'button', onclick: () => start(file, pre, title.value.trim(), subject.value.trim(), err) }, 'ابدأ التحليل'),
+      h('button', { class: 'btn btn-ghost btn-block', type: 'button', onclick() { fileIn.value = ''; pick(); } }, 'اختر ملفًا آخر')));
+  });
+  async function start(file, pre, title, subject, err) {
+    err.textContent = '';
+    try {
+      needOnline();
+      const ls = await getLectures();
+      const dup = ls.find(l => l.fileHash === pre.hash);
+      if (dup) { toast('هذه المحاضرة مرفوعة من قبل، فتحتها لك.'); go('lecture/' + encodeURIComponent(dup.id)); return; }
+      const trial = subState() !== 'active';
+      if (trial) {
+        if (!canUseTrialHere()) throw new AppError('استُعملت التجربة المجانية على هذا الجهاز من حساب آخر.');
+        const used = await Store.get('trialFiles', pre.hash);
+        if (used && used.uid !== S.user.uid) throw new AppError('هذه المحاضرة استُعملت في تجربة مجانية سابقة. اختر محاضرة أخرى أو اشترك.');
+      }
+      const id = Date.now().toString(36) + rid(6);
+      const lec = { ownerUid: S.user.uid, title, subject, pageCount: pre.pages, fileName: file.name, sizeBytes: file.size, fileHash: pre.hash, status: 'processing', digestJson: '', errorMsg: '', isTrial: trial, createdAt: Date.now() };
+      progress(0);
+      saved(await Store.set('lectures', id, lec)); lec.id = id; hydrateLecture(lec); if (S.lectures) S.lectures.unshift(lec);
+      progress(1);
+      const kept = await FileVault.put(id, file);
+      if (!kept) toast('تعذّر حفظ الملف على جهازك، سيبقى متاحًا حتى تغلق التطبيق.');
+      progress(2);
+      await runDigest(lec, file, pre.pageTexts);
+      progress(3);
+      setTimeout(() => go('lecture/' + encodeURIComponent(id)), 500);
+    } catch (e) {
+      area.textContent = ''; area.append(errorState(e, null),
+        h('div', { class: 'stack' }, S.lectures && S.lectures[0] && S.lectures[0].fileHash === pre.hash ? h('button', { class: 'btn btn-primary btn-block', type: 'button', onclick: () => go('lecture/' + encodeURIComponent(S.lectures[0].id)) }, 'افتح المحاضرة وأعد التحليل') : h('button', { class: 'btn btn-primary btn-block', type: 'button', onclick: () => start(file, pre, title, subject, err) }, icon('refresh', 20), 'أعد المحاولة')));
+    }
+  }
+  function progress(step) {
+    const labels = ['تجهيز المحاضرة', 'حفظ الملف على جهازك', 'تحليل المحاضرة صفحة صفحة', 'جاهزة'];
+    area.textContent = '';
+    area.append(h('div', { class: 'card stack', role: 'status' }, h('h3', null, 'نجهّز محاضرتك'),
+      h('ol', { class: 'prog' }, labels.map((l, i) => h('li', { class: i < step ? 'ok' : i === step ? 'now' : '' }, h('span', { class: 'dot' }, i === step && step < 3 ? h('span', { class: 'spinner', style: 'width:22px;height:22px;border-width:2.5px' }) : h('i')), l))),
+      step === 2 ? h('p', { class: 'small muted' }, 'قد يستغرق التحليل دقيقة أو دقيقتين. أبقِ الصفحة مفتوحة.') : null));
+  }
+  pick();
+}
+
+/* ============================== SCREEN 4: LECTURE PAGE ============================== */
+async function screenLecture(id) {
+  const v = frame({ title: 'المحاضرة', back: 'home', nav: 'home' });
+  v.append(loadingState());
+  let lec, outs;
+  try { lec = await getLecture(id); outs = lec.status === 'ready' ? await getOutputs(id) : []; }
+  catch (e) { v.textContent = ''; v.append(errorState(e, () => screenLecture(id))); return; }
+  v.textContent = ''; $('#topbar h1').textContent = lec.title || 'المحاضرة';
+  const openLink = h('a', { class: 'btn btn-ghost btn-sm', target: '_blank', rel: 'noopener', hidden: true }, icon('file', 18), 'افتح الملف');
+  const attach = h('label', { class: 'btn btn-ghost btn-sm', hidden: true }, icon('upload', 18), 'أرفق الملف من جديد', h('input', { type: 'file', accept: '.pdf,application/pdf', class: 'sr', async onchange(e) {
+    const f = e.target.files[0]; if (!f) return;
+    try { const buf = await f.arrayBuffer(); const hash = await sha256Hex(buf); if (hash !== lec.fileHash) { toast('هذا ليس ملف المحاضرة نفسه.', true); return; } await FileVault.put(lec.id, f); toast('أُرفق الملف.'); screenLecture(id); }
+    catch (x) { toast('تعذّر إرفاق الملف.', true); }
+  } }));
+  FileVault.get(lec.id).then(b => { if (b) { openLink.href = URL.createObjectURL(b); openLink.hidden = false; } else attach.hidden = false; });
+  v.append(h('div', { class: 'card stack' },
+    t('h2', lec.title || lec.fileName, null),
+    h('div', { class: 'row small muted' }, lec.subject ? t('span', lec.subject) : null, lec.pageCount ? h('span', null, P_PAGES(lec.pageCount)) : null, h('span', null, fmtDate(lec.createdAt))),
+    h('div', { class: 'row' }, openLink, attach, lec.status === 'ready' ? h('button', { class: 'btn btn-ghost btn-sm', type: 'button', onclick: () => printLecture(lec, outs) }, icon('print', 18), 'احفظ في هاتفي') : null)));
+  if (lec.status !== 'ready') {
+    const box = h('div', { class: 'card stack', style: 'margin-top:16px' });
+    const retry = async () => {
+      box.textContent = ''; box.append(loadingState('جارٍ تحليل المحاضرة… قد يستغرق دقيقة أو دقيقتين.'));
+      try {
+        const blob = await FileVault.get(lec.id);
+        if (!blob) throw new AppError('ملف المحاضرة غير موجود على هذا الجهاز. أرفقه من جديد ثم أعد التحليل.');
+        const pre = await inspectPdf(blob instanceof File ? blob : new File([blob], lec.fileName || 'lecture.pdf', { type: 'application/pdf' }));
+        await runDigest(lec, blob, pre.pageTexts); screenLecture(id);
+      } catch (e) { box.textContent = ''; box.append(errorState(e, retry)); }
+    };
+    box.append(h('h3', null, lec.status === 'error' ? 'تعذّر تحليل المحاضرة' : 'لم يكتمل تحليل المحاضرة'), lec.errorMsg ? t('p', lec.errorMsg, 'muted') : null,
+      h('button', { class: 'btn btn-primary', type: 'button', onclick: retry }, icon('refresh', 20), 'أعد التحليل'));
+    v.append(box); return;
+  }
+  if (isTrialLecture(lec) && subState() !== 'active') v.append(h('div', { class: 'note', style: 'margin-top:12px' }, 'محاضرة التجربة: تستطيع استعمال كل طريقة مرة واحدة. ما تنشئه يبقى محفوظًا لك.'));
+  const count = (m) => outs.filter(o => o.mode === m).length;
+  for (const g of GROUPS) {
+    v.append(h('div', { class: 'group-title' }, g.ar));
+    v.append(h('div', { class: 'modes' }, Object.entries(MODES).filter(([, m]) => m.group === g.id).map(([key, m]) => {
+      const blocked = modeBlocked(key, lec.digest); const n = count(key);
+      const locked = !blocked && !n && !canGenerate(lec, 0);
+      const badge = n ? h('span', { class: 'chip green badge' }, icon('check', 14), (m.kind === 'exercise' || m.kind === 'session') && n > 1 ? String(n) : '') : locked ? h('span', { class: 'chip gray badge' }, icon('lock', 14)) : null;
+      return h('button', { class: 'mode' + (blocked ? ' dim' : '') + (locked ? ' locked' : ''), type: 'button', 'aria-disabled': blocked ? 'true' : null, onclick() { if (blocked) { toast(blocked); return; } go('out/' + encodeURIComponent(lec.id) + '/' + key); } },
+        badge, h('span', { class: 'mi' }, icon(m.icon, 22)), h('b', null, m.ar), h('span', { class: 'd' }, blocked || m.desc));
+    })));
+  }
+  v.append(h('h2', null, 'سجل المحاضرة'));
+  if (!outs.length) v.append(h('p', { class: 'muted small' }, 'لم تنشئ شيئًا بعد. اختر طريقة من الأعلى، وكل ما تنشئه يُحفظ هنا بالترتيب.'));
+  else v.append(h('ol', { class: 'timeline' }, [...outs].sort((a, b) => a.createdAt - b.createdAt).map(o => h('li', null, h('a', { href: '#/out/' + encodeURIComponent(lec.id) + '/' + o.mode + '/' + o.part },
+    h('b', null, MODES[o.mode].ar, o.part > 1 || o.mode === 'teach' ? ' — ' + (o.mode === 'teach' ? 'جلسة ' : 'المجموعة ') + o.part : ''),
+    h('div', { class: 'row small muted' }, h('span', null, fmtDate(o.createdAt)), o.lastTotal ? h('span', { class: 'chip' }, o.lastScore + '/' + o.lastTotal) : null, o.translationJson ? h('span', { class: 'chip gray' }, 'مترجمة') : null))))));
+}
+
+/* ============================== SCREEN 5: RESULT ============================== */
+async function generateOutput(lecture, mode, part, opts = {}) {
+  const d = lecture.digest; const N = lecture.pageCount || 0;
+  let content;
+  if (mode === 'teach') {
+    const { section, related } = sectionData(d, opts.sectionTitle);
+    let prompt = `The student explained the section below in their own words. Compare it with the lecture data for that section. Judge meaning, not wording or language (the student may write in Arabic). Be strict but kind. Write the feedback in English. JSON: {"score":int 0-10,"correct":[string],"missing":[string],"wrong":[{"said":string,"fix":string,"page":int}],"summary":string,"page":int,"section":string}`;
+    if (opts.fix) prompt += `\nA pharmacist reviewer confirmed that this part of your previous feedback was WRONG:\n"${opts.fix.itemText}"\nReported problem: ${opts.fix.reason}${opts.fix.note ? ' — ' + opts.fix.note : ''}\nCorrect it strictly according to the section data.`;
+    prompt += `\n\nSECTION DATA:\n${JSON.stringify({ section, related })}\n\nSTUDENT EXPLANATION:\n${opts.studentText}`;
+    content = normalizeOutput('teach', await AIX.call({ parts: [{ text: prompt }], system: SYSTEM_STUDY }), N);
+    content.section = section.title;
+  } else content = normalizeOutput(mode, await AIX.call({ parts: [{ text: modePrompt(mode, d, opts) }], system: SYSTEM_STUDY }), N);
+  return content;
+}
+async function createOutput(lecture, mode, part, opts) {
+  const content = await generateOutput(lecture, mode, part, opts);
+  const id = lecture.id + '_' + mode + '_' + part;
+  const doc = { ownerUid: S.user.uid, lectureId: lecture.id, mode, part, contentJson: JSON.stringify(content), translationJson: '', regenCount: 0, lastScore: null, lastTotal: null, studentText: opts.studentText || '', sectionTitle: opts.sectionTitle || '', createdAt: Date.now() };
+  saved(await Store.set('outputs', id, doc));
+  doc.id = id; doc.content = content;
+  (S.outputs[lecture.id] = S.outputs[lecture.id] || []).push(doc);
+  return doc;
+}
+async function recordResult(out, r) {
+  try {
+    saved(await Store.set('attempts', out.id + '_' + Date.now().toString(36), { ownerUid: S.user.uid, lectureId: out.lectureId, outputId: out.id, mode: out.mode, score: r.score, total: r.total, wrongPoints: r.wrongPoints.slice(0, 30), createdAt: Date.now() }));
+    await Store.set('outputs', out.id, { lastScore: r.score, lastTotal: r.total }, { merge: true });
+    out.lastScore = r.score; out.lastTotal = r.total;
+  } catch (e) { toast(e instanceof AppError ? e.message : 'تعذّر حفظ نتيجتك.', true); }
+}
+function excerptFor(digest, item) {
+  let pts = [];
+  if (item.page) pts = digest.sections.flatMap(s => s.points).filter(p => p.page === item.page);
+  if (!pts.length) { const sec = digest.sections.find(s => s.title === item.section); pts = sec ? sec.points : []; }
+  return pts.map(p => '• ' + p.text + ' (p.' + p.page + ')').join('\n').slice(0, 1800);
+}
+function openReport(lecture, out, path, item, onSent) {
+  const dlg = $('#dlg'); dlg.textContent = '';
+  const reasons = ['معلومة خاطئة', 'رقم خاطئ', 'لا تطابق المحاضرة', 'غير ذلك'];
+  const note = h('textarea', { class: 'input', rows: '3', dir: 'auto', id: 'rnote', placeholder: 'اكتب ما الخطأ إن أردت (اختياري)', style: 'min-height:90px' });
+  const msg = h('div', { role: 'alert' });
+  const send = h('button', { class: 'btn btn-primary', type: 'button', async onclick() {
+    const reason = (dlg.querySelector('input[name="rr"]:checked') || {}).value;
+    if (!reason) { msg.textContent = ''; msg.append(h('div', { class: 'err' }, 'اختر نوع الخطأ.')); return; }
+    send.disabled = true;
+    const rid2 = (out.id + '_' + (out.regenCount || 0) + '_' + path).replace(/[^A-Za-z0-9_.-]/g, '_');
+    const rep = { ownerUid: S.user.uid, ownerName: S.profile.displayName || '', ownerEmail: S.profile.email || '', lectureId: lecture.id, lectureTitle: lecture.title || '', outputId: out.id, mode: out.mode, regen: out.regenCount || 0, path, itemText: itemText(item), page: item.page || 0, reason, note: note.value.trim().slice(0, 600), excerpt: excerptFor(lecture.digest, item), status: 'pending', fixed: false, createdAt: Date.now() };
+    try { saved(await Store.set('reports', rid2, rep)); rep.id = rid2; dlg.close(); toast('وصل بلاغك، وستُراجع المعلومة.'); onSent(rep); }
+    catch (e) { msg.textContent = ''; msg.append(errorState(e)); send.disabled = false; }
+  } }, 'أرسل البلاغ');
+  dlg.append(h('div', { class: 'dlg' }, h('h3', null, 'أبلغ عن خطأ علمي'),
+    h('div', { class: 'card flat small', style: 'max-height:120px;overflow:auto' }, h('pre', { class: 'wrap', dir: 'auto' }, itemText(item).slice(0, 500))),
+    h('fieldset', { style: 'border:0;padding:0;margin:0' }, h('legend', { class: 'small', style: 'font-weight:500;margin-bottom:6px' }, 'نوع الخطأ'), h('div', { class: 'choice' }, reasons.map(r => h('label', null, h('input', { type: 'radio', name: 'rr', value: r }), r)))),
+    h('label', { class: 'sr', for: 'rnote' }, 'ملاحظة'), note, msg,
+    h('div', { class: 'row' }, send, h('button', { class: 'btn btn-ghost', type: 'button', onclick: () => dlg.close() }, 'إلغاء'))));
+  dlg.showModal();
+}
+function makeFlagger(lecture, out, reports, rerender) {
+  const regen = out.regenCount || 0;
+  const map = new Map(reports.filter(r => r.outputId === out.id && (r.regen || 0) === regen).map(r => [r.path, r]));
+  return (path, item) => {
+    const r = map.get(path);
+    if (!r) return h('button', { class: 'flag', type: 'button', title: 'أبلغ عن خطأ علمي', 'aria-label': 'أبلغ عن خطأ علمي', onclick: () => openReport(lecture, out, path, item, (rep) => { map.set(path, rep); reports.push(rep); rerender(); }) }, icon('flag', 18));
+    if (r.status === 'pending') return h('span', { class: 'chip amber' }, 'قيد المراجعة');
+    if (r.status === 'rejected') return h('span', { class: 'chip gray' }, 'رُوجعت: صحيحة');
+    if (r.status === 'confirmed' && !r.fixed) return h('button', { class: 'fixbtn', type: 'button', onclick: (e) => fixFromReport(lecture, out, r, e.currentTarget) }, 'اضغط لتصحيحه');
+    return h('span', { class: 'chip green' }, 'صُحّحت');
+  };
+}
+async function fixFromReport(lecture, out, rep, btn) {
+  btn.disabled = true; btn.textContent = 'جارٍ التصحيح…';
+  try {
+    const fix = { itemText: rep.itemText, reason: rep.reason, note: rep.note };
+    const content = await generateOutput(lecture, out.mode, out.part, { fix, studentText: out.studentText, sectionTitle: out.sectionTitle });
+    const upd = { contentJson: JSON.stringify(content), translationJson: '', regenCount: (out.regenCount || 0) + 1, lastScore: null, lastTotal: null };
+    saved(await Store.set('outputs', out.id, upd, { merge: true })); Object.assign(out, upd, { content });
+    saved(await Store.set('reports', rep.id, { fixed: true }, { merge: true })); rep.fixed = true;
+    toast('صُحّحت النتيجة.'); route();
+  } catch (e) { btn.disabled = false; btn.textContent = 'اضغط لتصحيحه'; toast(e instanceof AppError ? e.message : 'تعذّر التصحيح.', true); }
+}
+function genLoading(mode) { return h('div', { class: 'card' }, loadingState('نُعدّ «' + MODES[mode].ar + '» من محاضرتك… قد يستغرق دقيقة.')); }
+async function screenOutput(lectureId, mode, partArg) {
+  const meta = MODES[mode]; if (!meta) return go('lecture/' + encodeURIComponent(lectureId));
+  const v = frame({ title: meta.ar, back: 'lecture/' + encodeURIComponent(lectureId), nav: 'home' });
+  v.append(loadingState());
+  let lec, outs, reports;
+  try {
+    lec = await getLecture(lectureId);
+    if (lec.status !== 'ready') { go('lecture/' + encodeURIComponent(lectureId)); return; }
+    outs = await getOutputs(lectureId);
+    reports = await Store.list('reports', [['ownerUid', '==', S.user.uid], ['lectureId', '==', lectureId]]).catch(() => []);
+  } catch (e) { v.textContent = ''; v.append(errorState(e, () => screenOutput(lectureId, mode, partArg))); return; }
+  v.textContent = '';
+  v.append(h('div', { class: 'small muted', style: 'margin-bottom:8px' }, t('span', lec.title), ' • ', meta.desc));
+  const blocked = modeBlocked(mode, lec.digest);
+  if (blocked) { v.append(emptyState(meta.icon, blocked, 'هذه الطريقة لا تناسب هذه المحاضرة.')); return; }
+  const mine = outs.filter(o => o.mode === mode).sort((a, b) => a.part - b.part);
+  const body = h('div'); v.append(body);
+  const generate = async (part, opts = {}) => {
+    body.textContent = ''; body.append(genLoading(mode));
+    try { const o = await createOutput(lec, mode, part, opts); mine.push(o); show(o); return o; }
+    catch (e) { body.textContent = ''; body.append(errorState(e, () => generate(part, opts))); return null; }
+  };
+  const avoidFrom = () => mine.flatMap(o => { const c = o.content; return arr(c.cases || c.questions || c.sentences).map(x => (x.question || x.text || x.scenario || '').slice(0, 90)); });
+
+  function show(out) {
+    body.textContent = '';
+    const exercise = meta.kind === 'exercise' || meta.kind === 'session';
+    const parts = (S.outputs[lec.id] || []).filter(o => o.mode === mode).sort((a, b) => a.part - b.part);
+    if (exercise && parts.length) {
+      body.append(h('div', { class: 'sets', role: 'group', 'aria-label': meta.kind === 'session' ? 'الجلسات' : 'المجموعات' }, parts.map(o => h('button', { type: 'button', 'aria-pressed': String(o.id === out.id), onclick: () => show(o) },
+        (meta.kind === 'session' ? 'جلسة ' : 'المجموعة ') + o.part, o.lastTotal ? ' • ' + o.lastScore + '/' + o.lastTotal : (o.mode === 'teach' && o.content ? ' • ' + o.content.score + '/10' : '')))));
+    }
+    const actions = h('div', { class: 'row', style: 'margin:12px 0' });
+    const next = parts.length + 1;
+    if (meta.kind === 'exercise') {
+      actions.append(canGenerate(lec, parts.length) ? h('button', { class: 'btn btn-soft btn-sm', type: 'button', onclick: () => generate(next, { avoid: avoidFrom() }) }, icon('plus', 18), 'مجموعة جديدة')
+        : h('span', { class: 'small muted' }, 'المجموعات الجديدة للمشتركين.'));
+    }
+    if (meta.kind === 'session') actions.append(h('button', { class: 'btn btn-soft btn-sm', type: 'button', onclick: () => teachForm() }, icon('plus', 18), 'جلسة جديدة'));
+    let lang = 'en';
+    const tabs = h('div', { class: 'tabs', role: 'group', 'aria-label': 'لغة العرض' });
+    const holder = h('div');
+    const draw = () => {
+      tabs.textContent = '';
+      tabs.append(h('button', { type: 'button', 'aria-pressed': String(lang === 'en'), onclick() { lang = 'en'; draw(); } }, 'English'),
+        h('button', { type: 'button', 'aria-pressed': String(lang === 'ar'), async onclick() {
+          if (!out.translationJson) {
+            if (!canTranslate(lec, out)) { toast('الترجمة الجديدة للمشتركين.', true); return; }
+            holder.textContent = ''; holder.append(loadingState('جارٍ الترجمة إلى العربية…'));
+            try { const tr = await aiTranslate(mode, out.content); out.translationJson = JSON.stringify(tr); saved(await Store.set('outputs', out.id, { translationJson: out.translationJson }, { merge: true })); }
+            catch (e) { holder.textContent = ''; holder.append(errorState(e)); return; }
+          }
+          lang = 'ar'; draw();
+        } }, out.translationJson ? 'العربية' : 'ترجم للعربية'));
+      holder.textContent = '';
+      let data = out.content;
+      if (lang === 'ar') { try { data = JSON.parse(out.translationJson); } catch (e) { data = out.content; } }
+      const ctx = { lang, reveal: false, flag: makeFlagger(lec, out, reports, draw), onResult: (r) => recordResult(out, r) };
+      if (mode === 'teach' && out.studentText) holder.append(h('div', { class: 'card flat', style: 'margin-bottom:12px' }, h('div', { class: 'small muted' }, 'القسم: ', t('span', out.sectionTitle)), h('b', { class: 'small' }, 'شرحك:'), t('p', out.studentText, 'small')));
+      holder.append(renderOutput(mode, data, ctx));
+      if (mode === 'calc') holder.append(h('div', { style: 'margin-top:12px' }, subState() === 'active' ? h('button', { class: 'btn btn-primary btn-block', type: 'button', onclick: draw }, icon('refresh', 20), 'أرقام جديدة') : h('p', { class: 'small muted' }, 'الأرقام الجديدة بلا حدود للمشتركين.')));
+    };
+    draw();
+    body.append(actions.children.length ? actions : '', tabs, h('div', { class: 'xs muted', style: 'margin:8px 0 12px' }, 'أُنشئت في ' + fmtDate(out.createdAt) + (out.regenCount ? ' • صُحّحت ' + out.regenCount + ' مرة' : '') + ' • اضغط علامة البلاغ بجانب أي معلومة تشك فيها.'), holder);
+  }
+
+  function teachForm() {
+    body.textContent = '';
+    const parts = mine.length;
+    if (!canGenerate(lec, parts)) { body.append(lockedState('الجلسات الجديدة للمشتركين.')); return; }
+    const sel = h('select', { class: 'input', id: 'tsec', dir: 'auto' }, lec.digest.sections.map(s => h('option', { value: s.title }, s.title + ' (' + pagesLabel(s.pages) + ')')));
+    const ta = h('textarea', { class: 'input', id: 'ttxt', dir: 'auto', placeholder: 'اشرح هذا القسم بكلماتك، كأنك تشرحه لزميلك. تستطيع الكتابة بالعربية أو الإنجليزية.' });
+    const err = h('div', { role: 'alert' });
+    body.append(h('div', { class: 'card stack' }, h('p', { class: 'small muted', style: 'margin:0' }, 'اختر قسمًا، واشرحه دون النظر إلى المحاضرة، ثم نقارن شرحك بها ونصحّح لك.'),
+      h('div', { class: 'field' }, h('label', { for: 'tsec' }, 'القسم'), sel), h('div', { class: 'field' }, h('label', { for: 'ttxt' }, 'شرحك'), ta), err,
+      h('button', { class: 'btn btn-primary btn-block', type: 'button', async onclick() {
+        err.textContent = ''; const txt = ta.value.trim();
+        if (txt.length < 40) { err.append(h('div', { class: 'err' }, 'اكتب شرحًا أطول قليلًا (جملتين على الأقل).')); return; }
+        await generate(mine.length + 1, { studentText: txt.slice(0, 4000), sectionTitle: sel.value });
+      } }, 'قارن شرحي بالمحاضرة')));
+  }
+
+  const want = partArg ? mine.find(o => String(o.part) === String(partArg)) : null;
+  if (want) return show(want);
+  if (meta.kind === 'session') { if (mine.length) show(mine[mine.length - 1]); else teachForm(); return; }
+  if (mine.length) return show(mine[mine.length - 1]);
+  if (!canGenerate(lec, 0)) { body.append(lockedState()); return; }
+  await generate(1, {});
+}
+
+/* ---------- save the whole lecture as PDF (print) ---------- */
+function printLecture(lec, outs) {
+  const root = $('#print-root'); root.textContent = '';
+  root.append(h('div', { class: 'row', style: 'margin-bottom:12px' }, logo(44), h('div', null, t('h2', lec.title || lec.fileName), h('div', { class: 'small muted' }, [lec.subject, lec.pageCount ? P_PAGES(lec.pageCount) : '', fmtDate(lec.createdAt)].filter(Boolean).join(' • ')))));
+  const sorted = [...outs].sort((a, b) => a.createdAt - b.createdAt);
+  if (!sorted.length) root.append(h('p', null, 'لا توجد نتائج محفوظة لهذه المحاضرة بعد.'));
+  sorted.forEach((o, i) => {
+    const sec = h('section', { class: i ? 'pbreak' : '' });
+    sec.append(h('h2', null, MODES[o.mode].ar + (o.part > 1 ? ' — ' + (o.mode === 'teach' ? 'جلسة ' : 'المجموعة ') + o.part : ''), ' ', h('span', { class: 'small muted' }, fmtDate(o.createdAt))));
+    if (o.mode === 'teach' && o.studentText) sec.append(h('div', { class: 'card flat' }, h('b', null, 'شرحك: '), t('p', o.studentText)));
+    try {
+      sec.append(renderOutput(o.mode, o.content, { lang: 'en', reveal: true }));
+      if (o.translationJson) { sec.append(h('h3', { style: 'margin-top:16px' }, 'الترجمة العربية')); sec.append(renderOutput(o.mode, JSON.parse(o.translationJson), { lang: 'ar', reveal: true })); }
+    } catch (e) { sec.append(h('p', null, 'تعذّر عرض هذه النتيجة.')); }
+    root.append(sec);
+  });
+  root.append(h('p', { class: 'xs muted' }, 'ليكچر ' + APP.version + ' — المحتوى مولّد بالذكاء الاصطناعي وقد يخطئ؛ ارجع إلى رقم الصفحة في محاضرتك.'));
+  document.body.classList.add('printing');
+  const done = () => { document.body.classList.remove('printing'); root.textContent = ''; window.removeEventListener('afterprint', done); };
+  window.addEventListener('afterprint', done);
+  setTimeout(() => window.print(), 60);
+}
+
+/* ============================== SCREEN 6: SURVIVAL PLAN ============================== */
+async function screenPlan() {
+  const v = frame({ title: 'خطة النجاة', nav: 'plan' });
+  v.append(loadingState());
+  let lectures, plans;
+  try { lectures = (await getLectures()).filter(l => l.status === 'ready' && l.digest); plans = await Store.list('plans', [['ownerUid', '==', S.user.uid]]); }
+  catch (e) { v.textContent = ''; v.append(errorState(e, screenPlan)); return; }
+  v.textContent = '';
+  if (!lectures.length) { v.append(emptyState('plan', 'ارفع محاضرة أولًا', 'خطة النجاة تُبنى من محاضراتك وموعد امتحانك.', canUpload() ? h('button', { class: 'btn btn-primary', type: 'button', onclick: () => go('upload') }, icon('upload', 20), 'ارفع محاضرة') : null)); return; }
+  plans.sort((a, b) => b.createdAt - a.createdAt);
+  const latest = plans[0];
+  const area = h('div'); v.append(area);
+  const showForm = () => {
+    area.textContent = '';
+    if (!(subState() === 'active' || plans.length === 0)) { area.append(lockedState('الخطط الجديدة للمشتركين.')); return; }
+    const tomorrow = new Date(startOfDay(Date.now()) + DAY_MS); const iso = (d) => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+    const date = h('input', { class: 'input', type: 'date', id: 'pd', min: iso(tomorrow), required: true });
+    const hours = h('select', { class: 'input', id: 'ph' }, Array.from({ length: 12 }, (_, i) => h('option', { value: String(i + 1), selected: i + 1 === 4 }, plural(i + 1, 'ساعة واحدة', 'ساعتان', 'ساعات', 'ساعة'))));
+    const checks = lectures.map(l => h('label', null, h('input', { type: 'checkbox', value: l.id, checked: true }), t('span', l.title)));
+    const err = h('div', { role: 'alert' });
+    area.append(h('div', { class: 'card stack' }, h('p', { class: 'small muted', style: 'margin:0' }, 'أخبرنا بموعد امتحانك ووقتك، ونبني لك جدول مراجعة متباعدة مع فرز صريح لما لا يُترك.'),
+      h('div', { class: 'field' }, h('label', { for: 'pd' }, 'موعد الامتحان'), date),
+      h('div', { class: 'field' }, h('label', { for: 'ph' }, 'ساعات المذاكرة في اليوم'), hours),
+      h('fieldset', { style: 'border:0;padding:0;margin:0' }, h('legend', { class: 'small', style: 'font-weight:500;margin-bottom:6px' }, 'المحاضرات الداخلة في الامتحان'), h('div', { class: 'choice', style: 'flex-direction:column' }, checks)),
+      err,
+      h('button', { class: 'btn btn-primary btn-block', type: 'button', async onclick(e) {
+        err.textContent = '';
+        const ids = checks.map(c => c.querySelector('input')).filter(i => i.checked).map(i => i.value);
+        if (!date.value) { err.append(h('div', { class: 'err' }, 'اختر موعد الامتحان.')); return; }
+        if (!ids.length) { err.append(h('div', { class: 'err' }, 'اختر محاضرة واحدة على الأقل.')); return; }
+        const [y, m, d] = date.value.split('-').map(Number); const examMs = new Date(y, m - 1, d).getTime();
+        const nDays = Math.round((startOfDay(examMs) - startOfDay(Date.now())) / DAY_MS);
+        if (nDays < 1) { err.append(h('div', { class: 'err' }, 'اختر موعدًا بعد اليوم.')); return; }
+        const hrs = Number(hours.value);
+        area.textContent = ''; area.append(h('div', { class: 'card' }, loadingState('نفرز أقسام محاضراتك ونبني جدولك…')));
+        try {
+          const chosen = lectures.filter(l => ids.includes(l.id));
+          const attempts = await getAttempts().catch(() => []);
+          const weakMap = {};
+          for (const a of attempts) if (ids.includes(a.lectureId)) for (const w of arr(a.wrongPoints)) { const k = a.lectureId + '|' + w.section; weakMap[k] = (weakMap[k] || 0) + 1; }
+          const weak = Object.entries(weakMap).map(([k, n]) => ({ lectureId: k.split('|')[0], section: k.split('|').slice(1).join('|'), mistakes: n }));
+          const tri = await aiPlanTriage(chosen, weak, nDays, hrs);
+          const sched = buildSchedule(tri.items, examMs, hrs, Date.now());
+          const id = S.user.uid.slice(0, 12) + '_' + Date.now().toString(36);
+          const plan = { ownerUid: S.user.uid, examDate: examMs, hoursPerDay: hrs, lectureIds: ids, scheduleJson: JSON.stringify(sched), triageJson: JSON.stringify(tri.items), advice: tri.advice, createdAt: Date.now() };
+          saved(await Store.set('plans', id, plan)); plan.id = id; plans.unshift(plan); showPlan(plan);
+        } catch (x) { area.textContent = ''; area.append(errorState(x, showForm)); }
+      } }, 'ابنِ خطتي')));
+  };
+  const showPlan = (plan) => {
+    area.textContent = '';
+    let sched, tri; try { sched = JSON.parse(plan.scheduleJson); tri = JSON.parse(plan.triageJson); } catch (e) { area.append(errorState(new AppError('تعذّر قراءة الخطة.'), showForm)); return; }
+    const today = startOfDay(Date.now());
+    const daysLeft = Math.round((startOfDay(plan.examDate) - today) / DAY_MS);
+    const label = { study: 'مذاكرة أولى', review: 'مراجعة', quick: 'مراجعة سريعة' };
+    area.append(h('div', { class: 'card stack' }, h('div', { class: 'spread' }, h('h3', { style: 'margin:0' }, 'امتحانك ' + fmtDay(plan.examDate)), h('span', { class: 'chip' + (daysLeft <= 2 ? ' red' : '') }, daysLeft === 1 ? 'غدًا' : daysLeft === 2 ? 'بعد يومين' : daysLeft > 2 ? 'بعد ' + P_DAYS(daysLeft) : 'انتهى الموعد')),
+      plan.advice ? t('p', plan.advice, 'small') : null,
+      h('button', { class: 'btn btn-ghost btn-sm', type: 'button', onclick: showForm }, icon('refresh', 18), 'خطة جديدة')));
+    const keep = tri.filter(x => x.keep).sort((a, b) => a.priority - b.priority), drop = tri.filter(x => !x.keep);
+    area.append(h('h2', null, 'لا تترك هذا'), h('div', { class: 'card flat' }, keep.length ? h('ul', { class: 'clean' }, keep.map(x => h('li', null, t('b', x.section), ' — ', t('span', x.lectureTitle, 'small muted'), x.reason ? h('div', { class: 'small' }, x.reason) : null))) : h('p', { class: 'muted small' }, 'لا يوجد.')));
+    if (drop.length) area.append(h('h2', null, 'اتركه إن ضاق الوقت'), h('div', { class: 'card flat' }, h('ul', { class: 'clean' }, drop.map(x => h('li', null, t('b', x.section), ' — ', t('span', x.lectureTitle, 'small muted'), x.reason ? h('div', { class: 'small' }, x.reason) : null)))));
+    area.append(h('h2', null, 'جدولك يومًا بيوم'));
+    for (const d of sched.days) {
+      const cls = 'day' + (d.date === today ? ' today' : d.date < today ? ' past' : '');
+      area.append(h('div', { class: cls }, h('div', { class: 'spread' }, h('b', null, fmtDay(d.date) + (d.date === today ? ' — اليوم' : '')), h('span', { class: 'small muted' }, d.used ? P_MIN(d.used) : 'راحة')),
+        d.sessions.map(s => h('div', { class: 'sess' }, h('span', { class: 'chip' + (s.type === 'quick' ? ' amber' : s.type === 'review' ? ' gray' : '') }, label[s.type]),
+          h('a', { href: s.type === 'quick' ? '#/out/' + encodeURIComponent(s.lectureId) + '/review' : '#/lecture/' + encodeURIComponent(s.lectureId), style: 'flex:1;min-width:0;text-decoration:none;color:inherit' }, s.section ? t('div', s.section) : null, t('div', s.lectureTitle, 'xs muted')),
+          h('span', { class: 'small muted', style: 'white-space:nowrap' }, P_MIN(s.minutes))))));
+    }
+    if (sched.overflow.length) area.append(h('div', { class: 'note' }, h('b', null, 'لم يتسع الوقت لهذه الأقسام: '), sched.overflow.map(o => o.section).join('، ')));
+  };
+  if (latest) showPlan(latest); else showForm();
+}
+
+/* ============================== SCREEN 7: WEAK POINTS MAP ============================== */
+async function screenWeak() {
+  const v = frame({ title: 'نقاط ضعفي', nav: 'weak' });
+  v.append(skeleton(3));
+  let attempts, lectures;
+  try { [attempts, lectures] = await Promise.all([getAttempts(), getLectures()]); }
+  catch (e) { v.textContent = ''; v.append(errorState(e, screenWeak)); return; }
+  v.textContent = '';
+  const titles = new Map(lectures.map(l => [l.id, l.title || l.fileName]));
+  const agg = new Map();
+  for (const a of attempts) for (const w of arr(a.wrongPoints)) {
+    const k = a.lectureId + '|' + (w.section || '');
+    const e = agg.get(k) || { lectureId: a.lectureId, section: w.section || 'غير محدد', count: 0, pages: new Set(), last: 0 };
+    e.count++; if (w.page) e.pages.add(w.page); e.last = Math.max(e.last, a.createdAt); agg.set(k, e);
+  }
+  if (!agg.size) { v.append(emptyState('target', 'لا أخطاء مسجّلة بعد', 'حل أسئلة «اختبر نفسك» و«الكاونتر» و«أين الفخ»، وستمتلئ هذه الخريطة وحدها بالأقسام التي تخطئ فيها.')); return; }
+  const rows = [...agg.values()].sort((a, b) => b.count - a.count || b.last - a.last);
+  const max = rows[0].count;
+  const total = rows.reduce((s, r) => s + r.count, 0);
+  v.append(h('div', { class: 'card' }, h('p', { style: 'margin:0' }, 'مجموع أخطائك المسجّلة: ', h('b', null, String(total)), '، وعدد الأقسام التي أخطأت فيها: ', h('b', null, String(rows.length)), '. ابدأ بالأعلى؛ فهو أكثر ما يتكرر خطؤك فيه.')));
+  const byLec = new Map(); for (const r of rows) { if (!byLec.has(r.lectureId)) byLec.set(r.lectureId, []); byLec.get(r.lectureId).push(r); }
+  for (const [lid, list] of byLec) {
+    v.append(h('h2', null, t('span', titles.get(lid) || 'محاضرة')));
+    v.append(h('div', { class: 'stack' }, list.map(r => h('a', { class: 'card flat', href: '#/lecture/' + encodeURIComponent(lid), style: 'text-decoration:none;color:inherit' },
+      h('div', { class: 'spread' }, t('b', r.section), h('span', { class: 'chip red' }, plural(r.count, 'خطأ واحد', 'خطآن', 'أخطاء', 'خطأً'))),
+      h('div', { class: 'bar', style: 'margin:8px 0', 'aria-hidden': 'true' }, h('i', { style: 'width:' + Math.max(8, Math.round(r.count / max * 100)) + '%' })),
+      h('div', { class: 'row xs muted' }, r.pages.size ? pageBadge([...r.pages]) : null, h('span', null, 'آخر خطأ: ' + fmtDate(r.last)))))));
+  }
+}
+
+/* ============================== SCREEN 8: ACCOUNT (+ owner panel) ============================== */
+async function redeemCode(raw) {
+  needOnline();
+  const code = toWestern(raw).toUpperCase().replace(/[^A-Z0-9]/g, '');
+  if (code.length !== 10) throw new AppError('الكود من 10 رموز. تأكد منه وأعد المحاولة.');
+  const c = await Store.get('codes', code);
+  if (!c) throw new AppError('الكود غير صحيح.');
+  if (c.redeemedBy) throw new AppError('استُعمل هذا الكود من قبل.');
+  const base = Math.max(Date.now(), S.profile.subscriptionUntil || 0);
+  const until = base + (Number(c.days) || LIMITS.subDays) * DAY_MS;
+  const res = await Store.batch([
+    { op: 'set', col: 'codes', id: code, data: { redeemedBy: S.user.uid, redeemedAt: Date.now() }, merge: true },
+    { op: 'set', col: 'users', id: S.user.uid, data: { subscriptionUntil: until, lastCode: code }, merge: true }]);
+  if (res && res.queued) throw new AppError('لم يكتمل التفعيل بسبب الاتصال. أعد المحاولة وأنت متصل.');
+  setProfile({ subscriptionUntil: until, lastCode: code });
+  return until;
+}
+function screenAccount() {
+  const v = frame({ title: 'حسابي', nav: 'account' });
+  const p = S.profile; const s = subState();
+  const stages = ['الأولى', 'الثانية', 'الثالثة', 'الرابعة', 'الخامسة'];
+  v.append(h('div', { class: 'card stack' }, h('div', { class: 'spread' }, h('div', null, t('h3', p.displayName || 'طالب'), p.email ? h('div', { class: 'small muted ltr', dir: 'ltr' }, p.email) : null), h('button', { class: 'btn btn-ghost btn-sm', type: 'button', onclick: () => go('profile') }, 'تعديل')),
+    h('div', { class: 'row small muted' }, h('span', null, p.track === 'institute' ? 'معهد صحي' : 'كلية الصيدلة'), p.stage ? h('span', null, 'المرحلة ' + (stages[p.stage - 1] || p.stage)) : null, p.country ? h('span', null, p.country) : null)));
+  const codeIn = h('input', { class: 'input codebox', id: 'code', dir: 'ltr', autocomplete: 'off', autocapitalize: 'characters', placeholder: 'XXXXX-XXXXX' });
+  const cmsg = h('div', { role: 'status' });
+  const redeemBtn = h('button', { class: 'btn btn-primary', type: 'button', async onclick() {
+    cmsg.textContent = ''; redeemBtn.disabled = true;
+    try { const until = await redeemCode(codeIn.value); cmsg.append(h('div', { class: 'okbox' }, 'تم تفعيل اشتراكك حتى ' + fmtDate(until) + '.')); codeIn.value = ''; setTimeout(screenAccount, 1600); }
+    catch (e) { cmsg.append(errorState(e)); }
+    finally { redeemBtn.disabled = false; }
+  } }, 'فعّل الكود');
+  v.append(h('h2', null, 'الاشتراك'), h('div', { class: 'card stack' },
+    h('p', { style: 'margin:0' }, s === 'active' ? 'اشتراكك فعّال حتى ' + fmtDate(p.subscriptionUntil) + '.' : s === 'trial' ? 'أنت في التجربة المجانية: محاضرة واحدة، وكل طريقة مرة واحدة.' : 'لا يوجد اشتراك فعّال. ما أنشأته سابقًا يبقى مفتوحًا لك.'),
+    S.settings.priceIQD ? h('p', { class: 'small', style: 'margin:0' }, 'الاشتراك الشهري: ', h('b', { dir: 'ltr' }, fmtIQD(S.settings.priceIQD))) : null,
+    h('p', { class: 'small muted', style: 'margin:0' }, 'راسلنا على واتساب، ادفع وأرسل صورة الدفع، ويصلك كود تفعّله هنا.'),
+    h('a', { class: 'btn btn-primary btn-block', href: whatsappLink(subscribeText()), target: '_blank', rel: 'noopener' }, icon('whatsapp', 20), s === 'active' ? 'جدّد عبر واتساب' : 'اشترك عبر واتساب'),
+    h('div', { class: 'field' }, h('label', { for: 'code' }, 'عندك كود؟'), h('div', { class: 'calc-in' }, codeIn, redeemBtn)), cmsg));
+  v.append(h('h2', null, 'التفعيل'), h('div', { class: 'card spread' }, h('span', { class: 'row' }, S.aiKey ? h('span', { class: 'chip green' }, icon('check', 14), 'حسابك مفعّل') : h('span', { class: 'chip red' }, 'غير مفعّل')),
+    h('button', { class: 'btn btn-ghost btn-sm', type: 'button', onclick: () => go('activate') }, S.aiKey ? 'أعد التفعيل' : 'فعّل الآن')));
+  if (S.isAdmin) v.append(h('button', { class: 'btn btn-soft btn-block', type: 'button', style: 'margin-top:16px', onclick: () => go('admin') }, icon('shield', 20), 'لوحة المالكة'));
+  v.append(h('h2', null, 'عن التطبيق'), h('div', { class: 'card stack small' },
+    h('div', { class: 'row' }, logo(40), h('div', null, h('b', null, 'ليكچر ' + APP.version), h('div', { class: 'muted' }, 'طرق مذاكرة صيدلانية لمحاضراتك.'))),
+    h('p', { style: 'margin:0' }, 'يعمل ليكچر بخدمة ', bdi('Gemini'), ' من ', bdi('Google'), ' عبر حسابك المجاني الذي فعّلته. تستعمل ', bdi('Google'), ' محتوى الخطة المجانية لتحسين منتجاتها، وقد يطّلع عليه مراجعون بشر؛ لذلك لا ترفع ملفات فيها بيانات شخصية أو بيانات مرضى.'),
+    h('p', { style: 'margin:0' }, 'نتائجك محفوظة في حسابك، وملف المحاضرة الأصلي محفوظ على جهازك فقط.'),
+    h('p', { class: 'muted', style: 'margin:0' }, 'المحتوى مولّد بالذكاء الاصطناعي وقد يخطئ. ارجع دائمًا إلى رقم الصفحة في محاضرتك، وأبلغ عن أي خطأ علمي.')));
+  v.append(h('button', { class: 'btn btn-ghost btn-block', type: 'button', style: 'margin-top:16px', async onclick() { try { await Auth.signOut(); location.hash = ''; } catch (e) { toast('تعذّر تسجيل الخروج.', true); } } }, icon('out', 20), 'تسجيل الخروج'));
+}
+async function copyText(s) { try { await navigator.clipboard.writeText(s); toast('نُسخ.'); } catch (e) { toast('تعذّر النسخ. انسخه يدويًا.', true); } }
+async function screenAdmin() {
+  if (!S.isAdmin) return go('account');
+  const v = frame({ title: 'لوحة المالكة', back: 'account', nav: 'account' });
+  const tabsDef = [['reports', 'البلاغات'], ['codes', 'الأكواد'], ['subs', 'المشتركون'], ['price', 'السعر']];
+  let cur = 'reports';
+  const tabs = h('div', { class: 'tabs', role: 'group', 'aria-label': 'أقسام اللوحة' });
+  const pane = h('div', { style: 'margin-top:16px' });
+  v.append(tabs, pane);
+  const drawTabs = () => { tabs.textContent = ''; tabsDef.forEach(([k, l]) => tabs.append(h('button', { type: 'button', 'aria-pressed': String(cur === k), onclick() { cur = k; drawTabs(); P[k](); } }, l))); };
+  const P = {
+    async reports() {
+      pane.textContent = ''; pane.append(skeleton(2));
+      try {
+        const list = (await Store.list('reports', [['status', '==', 'pending']])).sort((a, b) => a.createdAt - b.createdAt);
+        pane.textContent = '';
+        if (!list.length) { pane.append(emptyState('flag', 'لا بلاغات تنتظر المراجعة', 'حين يبلّغ طالب عن خطأ علمي يظهر هنا.')); return; }
+        for (const r of list) {
+          const card = h('div', { class: 'card stack', style: 'margin-bottom:12px' });
+          const decide = async (status) => {
+            try { saved(await Store.set('reports', r.id, { status, decidedAt: Date.now() }, { merge: true })); card.remove(); if (!pane.querySelector('.card')) pane.append(emptyState('flag', 'لا بلاغات تنتظر المراجعة', 'راجعت كل البلاغات.')); toast(status === 'confirmed' ? 'سُجّل الخطأ، وسيظهر للطالب زر التصحيح.' : 'سُجّلت المعلومة صحيحة.'); }
+            catch (e) { toast(e instanceof AppError ? e.message : 'تعذّر الحفظ.', true); }
+          };
+          card.append(h('div', { class: 'spread' }, t('b', r.lectureTitle || 'محاضرة'), h('span', { class: 'chip' }, (MODES[r.mode] || {}).ar || r.mode)),
+            h('div', { class: 'row small muted' }, t('span', r.ownerName || ''), r.ownerEmail ? h('span', { class: 'ltr', dir: 'ltr' }, r.ownerEmail) : null, pageBadge(r.page), h('span', null, fmtDate(r.createdAt))),
+            h('div', { class: 'small' }, h('b', null, 'نوع الخطأ: '), r.reason, r.note ? ' — ' : '', r.note ? t('span', r.note) : null),
+            h('div', { class: 'card flat' }, h('pre', { class: 'wrap small', dir: 'auto' }, r.itemText)),
+            r.excerpt ? h('details', { class: 'ex' }, h('summary', null, 'ما تقوله المحاضرة في الصفحة نفسها'), h('pre', { class: 'wrap', dir: 'auto' }, r.excerpt)) : null,
+            h('div', { class: 'row' }, h('button', { class: 'btn btn-amber btn-sm', type: 'button', onclick: () => decide('confirmed') }, 'الخطأ مؤكد'), h('button', { class: 'btn btn-ghost btn-sm', type: 'button', onclick: () => decide('rejected') }, 'المعلومة صحيحة')));
+          pane.append(card);
+        }
+      } catch (e) { pane.textContent = ''; pane.append(errorState(e, P.reports)); }
+    },
+    async codes() {
+      pane.textContent = '';
+      const count = h('input', { class: 'input', id: 'cc', type: 'number', min: '1', max: '50', value: '5', inputmode: 'numeric' });
+      const days = h('input', { class: 'input', id: 'cd', type: 'number', min: '1', max: '366', value: String(LIMITS.subDays), inputmode: 'numeric' });
+      const price = h('input', { class: 'input', id: 'cp', type: 'number', min: '0', step: '250', inputmode: 'numeric', placeholder: 'اختياري', value: S.settings.priceIQD ? String(S.settings.priceIQD) : '' });
+      const channel = h('select', { class: 'input', id: 'ch' }, ['واتساب', 'إنستقرام', 'غير ذلك'].map(c => h('option', { value: c }, c)));
+      const outBox = h('div'); const listBox = h('div');
+      pane.append(h('div', { class: 'card stack' }, h('h3', { style: 'margin:0' }, 'أصدر أكوادًا جديدة'),
+        h('div', { class: 'modes' }, h('div', { class: 'field' }, h('label', { for: 'cc' }, 'العدد'), count), h('div', { class: 'field' }, h('label', { for: 'cd' }, 'المدة بالأيام'), days)),
+        h('div', { class: 'modes' }, h('div', { class: 'field' }, h('label', { for: 'cp' }, 'السعر (د.ع)'), price), h('div', { class: 'field' }, h('label', { for: 'ch' }, 'القناة'), channel)),
+        h('button', { class: 'btn btn-primary btn-block', type: 'button', async onclick(e) {
+          const btn = e.currentTarget; const n = Math.max(1, Math.min(50, Math.round(Number(count.value) || 1))); const d = Math.max(1, Math.min(366, Math.round(Number(days.value) || LIMITS.subDays)));
+          btn.disabled = true; outBox.textContent = '';
+          try {
+            const codes = Array.from({ length: n }, () => rid(10, CODE_ALPHA));
+            saved(await Store.batch(codes.map(c => ({ op: 'set', col: 'codes', id: c, data: { days: d, priceIQD: Number(price.value) || null, channel: channel.value, createdAt: Date.now(), redeemedBy: null, redeemedAt: null } }))));
+            const text = codes.map(fmtCode).join('\n');
+            outBox.append(h('div', { class: 'okbox stack' }, h('b', null, 'أُصدر ' + plural(n, 'كود واحد', 'كودان', 'أكواد', 'كودًا') + '، مدة كل منها ' + P_DAYS(d) + ':'), h('pre', { class: 'wrap codebox' }, text), h('button', { class: 'btn btn-soft btn-sm', type: 'button', onclick: () => copyText(text) }, icon('copy', 18), 'انسخ الكل')));
+            loadList();
+          } catch (x) { outBox.append(errorState(x)); }
+          finally { btn.disabled = false; }
+        } }, 'أصدر'), outBox), h('h2', null, 'آخر الأكواد'), listBox);
+      const loadList = async () => {
+        listBox.textContent = ''; listBox.append(skeleton(1));
+        try {
+          const all = (await Store.list('codes')).sort((a, b) => b.createdAt - a.createdAt).slice(0, 60);
+          listBox.textContent = '';
+          if (!all.length) { listBox.append(h('p', { class: 'muted small' }, 'لم تُصدر أكوادًا بعد.')); return; }
+          listBox.append(h('div', { class: 'card flat' }, all.map(c => h('div', { class: 'spread item', style: 'padding:6px 0;border-bottom:1px solid var(--line)' },
+            h('span', { class: 'codebox small' }, fmtCode(c.id)), h('span', { class: 'xs muted' }, P_DAYS(c.days)),
+            c.redeemedBy ? h('span', { class: 'chip gray' }, 'مستعمل') : h('button', { class: 'chip green', type: 'button', style: 'border:0;cursor:pointer;min-height:32px', onclick: () => copyText(fmtCode(c.id)) }, 'متاح — انسخ')))));
+        } catch (e) { listBox.textContent = ''; listBox.append(errorState(e, loadList)); }
+      };
+      loadList();
+    },
+    async subs() {
+      pane.textContent = ''; pane.append(skeleton(2));
+      try {
+        const users = await Store.list('users'); const now = Date.now();
+        const active = users.filter(u => (u.subscriptionUntil || 0) > now).sort((a, b) => a.subscriptionUntil - b.subscriptionUntil);
+        const trialDone = users.filter(u => u.trialUsed && !((u.subscriptionUntil || 0) > now)).length;
+        pane.textContent = '';
+        pane.append(h('div', { class: 'modes' }, h('div', { class: 'card' }, h('div', { class: 'small muted' }, 'كل الحسابات'), h('b', { style: 'font-size:24px' }, String(users.length))), h('div', { class: 'card' }, h('div', { class: 'small muted' }, 'مشتركون الآن'), h('b', { style: 'font-size:24px' }, String(active.length)))),
+          h('p', { class: 'small muted' }, 'جرّبوا ولم يشتركوا بعد: ' + trialDone),
+          h('h2', null, 'المشتركون'));
+        if (!active.length) { pane.append(h('p', { class: 'muted small' }, 'لا يوجد مشترك فعّال الآن.')); return; }
+        pane.append(h('div', { class: 'card flat' }, active.map(u => h('div', { class: 'item', style: 'padding:8px 0;border-bottom:1px solid var(--line)' }, h('div', { class: 'spread' }, t('b', u.displayName || '—'), h('span', { class: 'chip' + (u.subscriptionUntil - now < 5 * DAY_MS ? ' amber' : '') }, 'حتى ' + fmtDate(u.subscriptionUntil))), u.email ? h('div', { class: 'xs muted ltr', dir: 'ltr' }, u.email) : null))));
+      } catch (e) { pane.textContent = ''; pane.append(errorState(e, P.subs)); }
+    },
+    price() {
+      pane.textContent = '';
+      const inp = h('input', { class: 'input', id: 'pr', type: 'number', min: '0', step: '250', inputmode: 'numeric', value: S.settings.priceIQD ? String(S.settings.priceIQD) : '', placeholder: 'مثال: 5000' });
+      const msg = h('div', { role: 'status' });
+      pane.append(h('div', { class: 'card stack' }, h('div', { class: 'field' }, h('label', { for: 'pr' }, 'سعر الاشتراك الشهري بالدينار العراقي'), inp),
+        h('p', { class: 'small muted', style: 'margin:0' }, 'اتركه فارغًا ليختفي السعر من التطبيق، ويعرفه الطالب منك على واتساب.'), msg,
+        h('button', { class: 'btn btn-primary', type: 'button', async onclick() {
+          msg.textContent = ''; const n = Math.round(Number(toWestern(inp.value)));
+          const val = inp.value.trim() === '' ? null : (Number.isFinite(n) && n > 0 ? n : NaN);
+          if (Number.isNaN(val)) { msg.append(h('div', { class: 'err' }, 'اكتب رقمًا صحيحًا.')); return; }
+          try { saved(await Store.set('settings', 'app', { priceIQD: val }, { merge: true })); S.settings.priceIQD = val; LS.set('lecture.settings', S.settings); msg.append(h('div', { class: 'okbox' }, val ? 'حُفظ السعر: ' + fmtIQD(val) : 'أُخفي السعر من التطبيق.')); }
+          catch (e) { msg.append(errorState(e)); }
+        } }, 'احفظ')));
+    }
+  };
+  drawTabs(); P[cur]();
+}
+
+/* ============================== BOOT ============================== */
+async function initFirebase() {
+  const base = 'https://www.gstatic.com/firebasejs/' + FB_VER + '/';
+  const [appM, authM, fsM] = await withTimeout(Promise.all([import(base + 'firebase-app.js'), import(base + 'firebase-auth.js'), import(base + 'firebase-firestore.js')]), 20000);
+  const app = appM.initializeApp(FIREBASE_CONFIG);
+  let db;
+  try { db = fsM.initializeFirestore(app, { localCache: fsM.persistentLocalCache({ tabManager: fsM.persistentMultipleTabManager() }) }); }
+  catch (e) { db = fsM.getFirestore(app); }
+  Store = makeFirestoreStore(fsM, db);
+  Auth.setupFirebase(authM, app);
+}
+function startAuth() { S.authReady = true; renderBanners(); Auth.start(handleUser); }
+async function boot() {
+  renderBanners();
+  window.addEventListener('online', renderBanners); window.addEventListener('offline', renderBanners);
+  const v = frame({ hideTop: true }); v.append(h('div', { class: 'hero' }, logo(96, 'شعار ليكچر'), h('div', { class: 'wordmark' }, 'ليكچر')), loadingState());
+  if (FIREBASE_CONFIG && FIREBASE_CONFIG.apiKey) {
+    try { await initFirebase(); }
+    catch (e) {
+      v.textContent = '';
+      v.append(h('div', { class: 'hero' }, logo(96, 'شعار ليكچر')), errorState(new AppError('تعذّر تحميل التطبيق. تحقق من اتصالك بالإنترنت.'), () => location.reload()),
+        h('button', { class: 'btn btn-ghost btn-block', type: 'button', onclick() { Store = LocalStore; Auth.setupLocal(); startAuth(); } }, 'تابع على هذا الجهاز فقط (وضع تجريبي)'));
+      return;
+    }
+  } else { Store = LocalStore; Auth.setupLocal(); }
+  startAuth();
+  if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => { /* app works without offline cache */ });
+}
+boot();
+</script>
+</body>
+</html>
